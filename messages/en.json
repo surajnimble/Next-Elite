@@ -1,0 +1,81 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "toggleTheme": "Toggle theme",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "workspace": "Workspace",
+    "analytics": "Analytics"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "Enter your email",
+      "passwordPlaceholder": "Enter your password",
+      "submit": "Login",
+      "forgotPassword": "Forgot password?",
+      "invalidCredentials": "Invalid credentials."
+    },
+    "logout": {
+      "title": "Logout",
+      "confirm": "Are you sure you want to logout?"
+    },
+    "passwordReset": {
+      "title": "Reset password",
+      "back": "Back",
+      "email": "Email",
+      "submit": "Send reset link",
+      "submitted": "If an account exists for that email, you'll receive a reset link shortly."
+    },
+    "toast": {
+      "loginSuccess": "Logged in successfully.",
+      "loginError": "Login failed. Please try again.",
+      "logoutSuccess": "Logged out successfully."
+    }
+  },
+  "dashboard": {
+    "user": {
+      "welcome": "Welcome back, {name}",
+      "description": "View your account overview and recent activity."
+    },
+    "admin": {
+      "welcome": "Welcome back, {name}",
+      "description": "Monitor platform activity and manage your workspace."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "description": "View and update your personal account information.",
+    "accountInfo": "Account information",
+    "accountInfoDescription": "Your personal details and access level.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "userId": "User ID",
+    "roles": "API roles",
+    "permissions": "Permissions",
+    "notProvided": "Not provided",
+    "roleAdmin": "Admin",
+    "roleUser": "User"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your workspace settings and preferences."
+  },
+  "sidebar": {
+    "menu": "Menu"
+  },
+  "errors": {
+    "403": "Forbidden",
+    "unauthorizedDescription": "You do not have permission to access this page.",
+    "goToDashboard": "Go to Dashboard"
+  }
+}

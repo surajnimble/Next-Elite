@@ -1,0 +1,151 @@
+# Next Elite - An open source production-ready Next.js starter kit
+
+> A production-ready, frontend-first Next.js 16 + React 19 + TypeScript starter kit with a complete authentication flow (email/password against your own backend API), a protected dashboard, a reusable shadcn/ui component kit, next-intl i18n (English + Hindi), Oxlint/Oxfmt tooling, and a polished developer experience. API-first with no bundled database.
+
+---
+
+## 1. Project Metadata & SEO Tags
+
+- **Project Name**: Next Elite (SaaS Boilerplate, Starter Kit, Template)
+- **Framework Stack**: Next.js 16 (App Router), React 19, TypeScript, Node.js 22.12+
+- **UI & CSS**: Tailwind CSS v4, shadcn/ui, Radix UI, CVA components, light/dark theme
+- **Authentication**: API-driven email/password (no social/OAuth providers)
+- **i18n**: next-intl, cookie-based, English + Hindi
+- **Performance**: Optimized for Lighthouse (Performance, Accessibility, Best Practices, SEO)
+- **Primary Category**: Developer Templates / SaaS Starters / Next.js Boilerplates
+- **Keywords**: Next.js 16, React 19, API authentication, RBAC, next-intl, type-safe i18n, API-first, sitemap, robots, llms.txt, T3 Env, Vitest, Playwright, Oxlint, Oxfmt, Lefthook, Knip, Tailwind v4, SaaS starter, frontend-first boilerplate, zero-database starter, auth starter
+
+---
+
+## 2. Core Resources
+
+- **GitHub Repository**: [salmanshahriar/Next-Elite](https://github.com/salmanshahriar/Next-Elite)
+- **Live Demo**: [nextelite.salmanshahriar.com](https://nextelite.salmanshahriar.com/)
+- **Agentic browsing**: `/llms.txt` (this file) for AI crawlers and assistants
+- **Health Check**: `GET /api/health` returns `{ "status": "ok" }`
+- **Auth API**: `/api/auth/login` and `/api/auth/logout` (proxy to your backend)
+
+---
+
+## 3. Key Architectural Pillars
+
+### A. API-First & Database-Free
+Connects to any existing backend (REST, GraphQL, or BFF). No local database required. It authenticates against your backend `POST /api/v1/auth/login` endpoint, stores the returned token in an httpOnly cookie, resolves identity on the server, and the client caches live data with TanStack Query.
+
+```
+[User] -> [Server Component] -> [getCurrentUser() from session cookie]
+              |
+              +-> Server HTML (next-intl messages from messages/)
+              |
+              +-> [Client] -> [TanStack Query] -> [Your Backend API]
+```
+
+### B. Feature-Based Structure
+Vertical slices under `src/features/`:
+- `auth/` - API login client, session/server helpers, RBAC model, login form, Zod schemas
+- `i18n/` - next-intl config, RTL helper, language switcher
+- `site/` - `site.config.json`, SEO helpers, locale utilities
+
+Shared UI lives in `src/components/shared/` and `src/components/ui/`.
+
+---
+
+## 4. Feature Specifications
+
+### Authentication & RBAC
+- **Login**: email/password against the backend `POST /api/v1/auth/login`; the returned access token is stored in an httpOnly session cookie
+- **Roles**: `admin` and `user`, derived from the backend role strings (any role containing `ADMIN` maps to `admin`)
+- **Identity**: `getCurrentUser()` (server-only, request-cached) reads the session cookie and returns the user
+- **Guards**: `/dashboard` requires a session; server pages redirect to `/` when signed out
+- **RBAC model**: `hasPermission()` plus `ROLE_PERMISSIONS` power the dashboard
+
+### Type-Safe i18n (next-intl)
+- **Two locales**: English (`en`, default) and Hindi (`hi`)
+- **Cookie locale**: `NEXT_LOCALE` cookie, no `/en` URL prefixes
+- **Compile-time keys**: Invalid `t("key")` calls fail the TypeScript build
+
+### SEO, PWA & Agentic Browsing
+- **Single config**: `src/features/site/site.config.json` drives metadata, sitemap, and manifest
+- **Routes**: `sitemap.ts`, `robots.ts`, `manifest.ts`
+- **Rich previews**: Open Graph, Twitter cards, JSON-LD structured data
+- **llms.txt**: This file at `/llms.txt` for AI discovery
+
+### Forms & Validation
+- **Zod** schemas for login and password reset
+- **React Hook Form** with `zodResolver`
+- **InputError** for accessible inline field errors
+
+### Testing & Quality Gates
+- **Vitest** + React Testing Library; `renderWithProviders` helper in `tests/utils/render.tsx`
+- **Playwright** E2E in `e2e/`; CI uses production server (Chromium)
+- **Oxlint + Oxfmt** for lint and format; **Knip** for unused code/deps
+- **Lefthook** pre-commit (oxlint + oxfmt); **Commitlint** on commit messages
+- **`npm run check`**: typecheck, lint, knip, and unit tests in one command
+
+### Observability
+- **Sentry** on client and server
+- **`GET /api/health`** for load balancers and Docker health checks
+
+---
+
+## 5. Quick Start & Setup
+
+### Requirements
+- Node.js 22.12+
+- npm
+
+### Local Installation
+```bash
+git clone https://github.com/salmanshahriar/Next-Elite.git
+cd Next-Elite
+npm install
+cp .env.example .env
+npm run dev
+```
+
+Open `http://localhost:6767` (default dev port). The root `/` is the login screen.
+
+### Docker
+```bash
+docker compose up --build
+# or
+docker build -t next-elite .
+docker run --rm --env-file .env -p 6767:6767 next-elite
+```
+
+---
+
+## 6. Scripts & CI
+
+| Script | Purpose |
+|--------|---------|
+| `npm run dev` | Dev server (port 6767) |
+| `npm run build` | Production build (standalone output) |
+| `npm run start` | Production server (port 6767) |
+| `npm run check` | typecheck + lint + knip + test |
+| `npm run lint` / `lint:fix` | Oxlint + Oxfmt |
+| `npm run test` | Vitest unit/component tests |
+| `npm run e2e` | Playwright end-to-end tests |
+| `npm run playwright:install` | Install Playwright browsers |
+
+**CI workflows** (`.github/workflows/`): `check.yml` on push/PR; `playwright.yml` for E2E.
+
+---
+
+## 7. Routes
+
+- `/` - Login screen (redirects authenticated users to `/dashboard`)
+- `/dashboard` - Protected signed-in dashboard (redirects anonymous users to `/`)
+- `/password-reset` - Request a password reset, with a back control
+- `/api/auth/login` - Proxies credentials to the backend login endpoint and sets the session cookie
+- `/api/auth/logout` - Clears the session cookie
+- `/api/health` - Health probe
+
+> This is an authentication-only app: there is no marketing site or component showcase route.
+
+---
+
+## 8. Intended Use Cases
+
+- **Best for**: Auth-first apps, SaaS frontends that consume external APIs, multilingual apps (the RTL plumbing is retained)
+- **Not ideal for**: Simple brochure sites or apps that need a bundled ORM/database layer

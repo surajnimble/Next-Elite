@@ -1,0 +1,140 @@
+'use client';
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/features/auth/hooks/auth-provider';
+import { cn } from '@/libs/utils';
+import { Icon } from '@/components/icons/app-icons';
+import { useTranslations } from 'next-intl';
+
+interface UserDropdownProps {
+  hideEmailOnMobile?: boolean;
+  onlyAvatar?: boolean;
+  align?: 'start' | 'center' | 'end';
+  contentClassName?: string;
+  onLogout?: () => void;
+}
+
+export const UserDropdown = ({
+  hideEmailOnMobile = false,
+  onlyAvatar = false,
+  align = 'end',
+  contentClassName,
+  onLogout,
+}: UserDropdownProps) => {
+  const { user, signOut } = useAuth();
+  const t = useTranslations('navigation');
+
+  if (!user) return null;
+
+  const displayName = user.name?.trim() || user.email || '';
+  const nameParts = displayName.split(/\s+/).filter(Boolean);
+  const initials =
+    (nameParts.length > 1
+      ? nameParts
+          .slice(0, 2)
+          .map((part) => part.charAt(0))
+          .join('')
+      : (nameParts[0]?.slice(0, 2) ?? '')
+    ).toUpperCase() || 'U';
+
+  const handleSignOut = async () => {
+    await signOut();
+    if (onLogout) {
+      onLogout();
+    }
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={cn(
+            'flex shrink-0 cursor-pointer items-center justify-center rounded-full border border-border/40 bg-background/40 backdrop-blur-xl transition-all hover:border-primary/30 hover:bg-accent/40 focus:outline-hidden',
+            onlyAvatar ? 'h-8 w-8 p-0' : 'gap-2 p-1',
+          )}
+        >
+          <Avatar
+            className={cn(
+              'shrink-0',
+              onlyAvatar ? 'h-7 w-7' : 'size-8 h-8 w-8',
+            )}
+          >
+            <AvatarFallback
+              className={cn(
+                'bg-primary/8 font-semibold text-primary',
+                onlyAvatar ? 'text-[10px]' : 'text-xs',
+              )}
+            >
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+          {!onlyAvatar && (
+            <span className="flex min-w-0 flex-col items-start pe-2 text-start leading-tight">
+              <span className="max-w-[120px] truncate text-xs font-medium text-foreground">
+                {displayName}
+              </span>
+              {user.name?.trim() ? (
+                <span
+                  className={cn(
+                    'max-w-[120px] truncate text-[10px] text-muted-foreground',
+                    hideEmailOnMobile ? 'hidden lg:block' : 'block',
+                  )}
+                >
+                  {user.email}
+                </span>
+              ) : null}
+            </span>
+          )}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className={cn('w-64', contentClassName)}
+        align={align}
+      >
+        <DropdownMenuLabel className="py-3 font-normal">
+          <div className="flex flex-col items-center justify-center gap-3 text-center">
+            <Avatar className="h-14 w-14 border-2 border-primary/20 shadow-xs">
+              <AvatarFallback className="bg-primary/10 text-base font-bold text-primary">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex w-full min-w-0 flex-col items-center justify-center gap-1.5 px-1">
+              <span className="max-w-full truncate text-sm font-semibold text-foreground">
+                {displayName}
+              </span>
+              <span className="max-w-full truncate text-xs text-muted-foreground">
+                {user.email}
+              </span>
+              <span
+                className={cn(
+                  'inline-flex shrink-0 items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold capitalize',
+                  user.role === 'admin'
+                    ? 'border-primary/30 bg-primary/15 text-primary'
+                    : 'border-border bg-muted text-muted-foreground',
+                )}
+              >
+                {user.role}
+              </span>
+            </div>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
+          onClick={() => void handleSignOut()}
+        >
+          <Icon name="logout" weight="fill" className="h-4 w-4" />
+          <span>{t('logout')}</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};

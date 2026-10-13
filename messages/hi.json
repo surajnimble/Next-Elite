@@ -1,0 +1,81 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "toggleTheme": "थीम बदलें",
+    "cancel": "रद्द करें",
+    "confirm": "पुष्टि करें"
+  },
+  "navigation": {
+    "dashboard": "डैशबोर्ड",
+    "profile": "प्रोफ़ाइल",
+    "settings": "सेटिंग्स",
+    "logout": "लॉग आउट",
+    "workspace": "वर्कस्पेस",
+    "analytics": "एनालिटिक्स"
+  },
+  "auth": {
+    "login": {
+      "title": "लॉगिन",
+      "email": "ईमेल",
+      "password": "पासवर्ड",
+      "emailPlaceholder": "अपना ईमेल दर्ज करें",
+      "passwordPlaceholder": "अपना पासवर्ड दर्ज करें",
+      "submit": "लॉगिन",
+      "forgotPassword": "पासवर्ड भूल गए?",
+      "invalidCredentials": "अमान्य क्रेडेंशियल।"
+    },
+    "logout": {
+      "title": "लॉग आउट",
+      "confirm": "क्या आप वाकई लॉग आउट करना चाहते हैं?"
+    },
+    "passwordReset": {
+      "title": "पासवर्ड रीसेट करें",
+      "back": "वापस",
+      "email": "ईमेल",
+      "submit": "रीसेट लिंक भेजें",
+      "submitted": "यदि उस ईमेल के लिए कोई खाता मौजूद है, तो आपको जल्द ही रीसेट लिंक मिलेगा।"
+    },
+    "toast": {
+      "loginSuccess": "सफलतापूर्वक लॉग इन हो गया।",
+      "loginError": "लॉगिन विफल रहा। कृपया पुनः प्रयास करें।",
+      "logoutSuccess": "सफलतापूर्वक लॉग आउट हो गया।"
+    }
+  },
+  "dashboard": {
+    "user": {
+      "welcome": "वापसी पर स्वागत है, {name}",
+      "description": "अपने खाते का अवलोकन और हालिया गतिविधि देखें।"
+    },
+    "admin": {
+      "welcome": "वापसी पर स्वागत है, {name}",
+      "description": "प्लेटफ़ॉर्म गतिविधि की निगरानी करें और अपने वर्कस्पेस को प्रबंधित करें।"
+    }
+  },
+  "profile": {
+    "title": "प्रोफ़ाइल",
+    "description": "अपनी व्यक्तिगत खाता जानकारी देखें और अपडेट करें।",
+    "accountInfo": "खाता जानकारी",
+    "accountInfoDescription": "आपका व्यक्तिगत विवरण और एक्सेस स्तर।",
+    "name": "नाम",
+    "email": "ईमेल",
+    "phone": "फ़ोन",
+    "userId": "उपयोगकर्ता आईडी",
+    "roles": "एपीआई भूमिकाएं",
+    "permissions": "अनुमतियां",
+    "notProvided": "उपलब्ध नहीं",
+    "roleAdmin": "एडमिन",
+    "roleUser": "उपयोगकर्ता"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "description": "अपने वर्कस्पेस की सेटिंग्स और प्राथमिकताएं प्रबंधित करें।"
+  },
+  "sidebar": {
+    "menu": "मेन्यू"
+  },
+  "errors": {
+    "403": "निषिद्ध",
+    "unauthorizedDescription": "आपके पास इस पृष्ठ तक पहुँचने की अनुमति नहीं है।",
+    "goToDashboard": "डैशबोर्ड पर जाएं"
+  }
+}
