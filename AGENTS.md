@@ -200,6 +200,7 @@ Authoritative list lives in `package.json`. Highlights (do not downgrade without
 │   │   └── ui/                     shadcn/ui primitives (vendored, Knip-ignored)
 │   ├── features/                   Vertical slices (domain logic)
 │   │   ├── auth/                   API auth client, session/server helpers, RBAC (incl. require), schemas
+│   │   ├── dashboard/              Admin dashboard stats (server fetch + stat-card grid)
 │   │   ├── i18n/                   next-intl request config, routing, RTL helper
 │   │   └── site/                   siteConfig (JSON + Zod), locale utilities
 │   ├── hooks/                      Shared React hooks
@@ -272,7 +273,7 @@ Authoritative list lives in `package.json`. Highlights (do not downgrade without
 | `(auth)/password-reset/page.tsx`    | `/password-reset` → redirects authenticated users to `/`, else `PasswordResetForm`.                                                                                                                                                                                                                                                                                            |
 | `(protected)/layout.tsx`            | `requireUser()`; renders `AppShell` + `UserSidebar`/`AdminSidebar` (by role) + `Topbar`, then `<main>` with the `@user`/`@admin` slot (falling back to `children`).                                                                                                                                                                                                            |
 | `(protected)/@user/**`              | Slot pages for `role === 'user'`: `dashboard` (renders a "welcome back, {name}" heading), `analytics`, `settings` (title/subtitle only) and `profile` (renders the signed-in `AuthUser` — avatar, name, email, phone, id, role badge, API roles, permissions — using `@/components/ui/*` inline). Each calls `requirePermission('dashboard.view:user')`. `default.tsx` = null. |
-| `(protected)/@admin/**`             | Slot pages for `role === 'admin'`: same four (the `profile` one likewise renders the `AuthUser`), guarded by `requirePermission('dashboard.view:admin')`. `default.tsx` = null.                                                                                                                                                                                                |
+| `(protected)/@admin/**`             | Slot pages for `role === 'admin'`: same four (the `dashboard` one renders `<DashboardStatsSection />` from `@/features/dashboard` inside `<Suspense>`; the `profile` one likewise renders the `AuthUser`), guarded by `requirePermission('dashboard.view:admin')`. `default.tsx` = null.                                                                                       |
 | `(protected)/unauthorized/page.tsx` | 403 fallback (the `requirePermission` redirect target). Rendered via `children` (both slots fall back to `default.tsx`).                                                                                                                                                                                                                                                       |
 | `api/auth/login/route.ts`           | `POST` → validates the body, calls the backend `POST /api/v1/auth/login`, sets the httpOnly session cookie, returns `{ user, message }`.                                                                                                                                                                                                                                       |
 | `api/auth/logout/route.ts`          | `POST` → calls the backend `POST /api/v1/auth/logout`, clears the cookie, returns `{ ok, message }`.                                                                                                                                                                                                                                                                           |
@@ -314,6 +315,18 @@ Authoritative list lives in `package.json`. Highlights (do not downgrade without
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `site.config.json` | **Single source for SEO/branding/locales.** Validated by `config.ts`. Edit here for app name, domain, keywords, features, languages, organization, socials, images, icons, theme, pricing.                                         |
 | `config.ts`        | Zod-validates `site.config.json` → `siteConfig`. Derives `baseUrl` (env `NEXT_PUBLIC_APP_URL` → JSON `domain` → fallback), `Locale` type (`keyof languages.locales`), `supportedLocales`, `defaultLocale`, `getLocaleDirection()`. |
+
+**`features/dashboard`**
+
+| File                                       | Purpose                                                                                                                                                                  |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `types.ts`                                 | `DashboardStats` — platform metrics returned by the backend.                                                                                                             |
+| `server/api.ts`                            | `'server-only'`. `getDashboardStats(accessToken?)` calls the backend `GET /api/v1/admin/getDashboardStats`; `DashboardApiError` carries the status/message.              |
+| `components/dashboard-stats-section.tsx`   | Server component. Reads the session, fetches the stats, and renders the grid or a translated error `Alert` (`dashboard.stats.errorTitle` / `errorDescription`).          |
+| `components/dashboard-stats-grid.tsx`      | `'use client'`. `DashboardStatsGrid` renders the `StatCard` grid with locale-formatted values; `DashboardStatsSkeleton` is the loading placeholder used by `<Suspense>`. |
+| `components/dashboard-stats-grid.test.tsx` | Colocated component test (labels + number formatting).                                                                                                                   |
+
+> The `(protected)/@admin/dashboard` page renders `<DashboardStatsSection />` inside `<Suspense fallback={<DashboardStatsSkeleton />}>`. Keys live under `dashboard.stats.*` in both message catalogs.
 
 ### 7.4 `src/components`
 

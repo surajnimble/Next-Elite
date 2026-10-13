@@ -49,6 +49,19 @@
     "admin": {
       "welcome": "Welcome back, {name}",
       "description": "Monitor platform activity and manage your workspace."
+    },
+    "stats": {
+      "totalUsers": "Total users",
+      "totalVendors": "Total vendors",
+      "pendingVendors": "Pending vendors",
+      "totalProducts": "Total products",
+      "totalOrders": "Total orders",
+      "revenue30d": "Revenue (30 days)",
+      "openTickets": "Open tickets",
+      "pendingReturns": "Pending returns",
+      "pendingRefunds": "Pending refunds",
+      "errorTitle": "Couldn't load dashboard stats",
+      "errorDescription": "Something went wrong while fetching the latest metrics. Please try again later."
     }
   },
   "profile": {

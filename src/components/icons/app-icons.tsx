@@ -20,6 +20,16 @@ import {
   ChartBar,
   Kanban,
   FileText,
+  Users,
+  Storefront,
+  Package,
+  ShoppingCart,
+  CurrencyCircleDollar,
+  Ticket,
+  ArrowUUpLeft,
+  WarningCircle,
+  Clock,
+  ArrowUUpRight,
 } from '@phosphor-icons/react';
 import type { ComponentProps } from 'react';
 
@@ -43,6 +53,16 @@ export const Icons = {
   chart: ChartBar,
   kanban: Kanban,
   fileText: FileText,
+  users: Users,
+  storefront: Storefront,
+  package: Package,
+  cart: ShoppingCart,
+  currency: CurrencyCircleDollar,
+  ticket: Ticket,
+  returns: ArrowUUpLeft,
+  warning: WarningCircle,
+  clock: Clock,
+  refund: ArrowUUpRight,
 } as const;
 
 export type IconName = keyof typeof Icons;

@@ -1,6 +1,9 @@
 import { PageHeader, PageLayout } from '@/components/shared/page-header';
 import { requirePermission } from '@/features/auth/rbac/require';
+import { DashboardStatsSkeleton } from '@/features/dashboard/components/dashboard-stats-grid';
+import { DashboardStatsSection } from '@/features/dashboard/components/dashboard-stats-section';
 import { getTranslations } from 'next-intl/server';
+import { Suspense } from 'react';
 
 const AdminDashboardPage = async () => {
   const [user, t] = await Promise.all([
@@ -16,6 +19,9 @@ const AdminDashboardPage = async () => {
         title={t('welcome', { name: displayName })}
         subtitle={t('description')}
       />
+      <Suspense fallback={<DashboardStatsSkeleton />}>
+        <DashboardStatsSection />
+      </Suspense>
     </PageLayout>
   );
 };

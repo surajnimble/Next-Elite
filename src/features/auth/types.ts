@@ -9,7 +9,6 @@ export interface AuthUser {
   phone: string;
   avatarUrl: string;
   role: UserRole;
-  /** Raw role strings returned by the backend API (e.g. `SUPER_ADMIN`). */
   apiRoles: string[];
   permissions: AuthPermission[];
 }

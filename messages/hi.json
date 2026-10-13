@@ -49,6 +49,19 @@
     "admin": {
       "welcome": "वापसी पर स्वागत है, {name}",
       "description": "प्लेटफ़ॉर्म गतिविधि की निगरानी करें और अपने वर्कस्पेस को प्रबंधित करें।"
+    },
+    "stats": {
+      "totalUsers": "कुल उपयोगकर्ता",
+      "totalVendors": "कुल विक्रेता",
+      "pendingVendors": "लंबित विक्रेता",
+      "totalProducts": "कुल उत्पाद",
+      "totalOrders": "कुल ऑर्डर",
+      "revenue30d": "राजस्व (30 दिन)",
+      "openTickets": "खुले टिकट",
+      "pendingReturns": "लंबित रिटर्न",
+      "pendingRefunds": "लंबित रिफंड",
+      "errorTitle": "डैशबोर्ड आँकड़े लोड नहीं हो सके",
+      "errorDescription": "नवीनतम मेट्रिक्स लाते समय कुछ गड़बड़ हो गई। कृपया बाद में पुनः प्रयास करें।"
     }
   },
   "profile": {
