@@ -142,6 +142,17 @@
   }
 }
 
+@keyframes ripple-expand {
+  from {
+    transform: translate(var(--rx), var(--ry)) scale(0);
+    opacity: 1;
+  }
+  to {
+    transform: translate(var(--rx), var(--ry)) scale(1);
+    opacity: 0;
+  }
+}
+
 /* ========== RTL Support ========== */
 
 [dir='rtl'] {

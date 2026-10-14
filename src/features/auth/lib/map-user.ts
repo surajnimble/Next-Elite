@@ -1,18 +1,6 @@
 import { getPermissionsForRole, getRoleFromApiRoles } from '../rbac/roles';
 import type { AuthUser } from '../types';
-
-/** Shape of `result.userData` returned by `POST /api/v1/auth/login`. */
-export interface ApiUserData {
-  userId: string;
-  name: string;
-  email: string;
-  phone?: string;
-  avatarUrl?: string;
-  role: string;
-  isActive?: boolean;
-  rolesList?: string[];
-  [key: string]: unknown;
-}
+import type { ApiUserData } from '@/libs/models';
 
 /**
  * Transforms the backend `userData` payload into the app's `AuthUser` model.
@@ -27,7 +15,7 @@ export function buildAuthUser(
   const apiRoles =
     rolesList && rolesList.length > 0
       ? [...rolesList]
-      : userData.rolesList && userData.rolesList.length > 0
+      : userData.rolesList?.length
         ? [...userData.rolesList]
         : [userData.role];
 

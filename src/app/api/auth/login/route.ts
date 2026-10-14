@@ -1,8 +1,8 @@
-import { ApiError, loginWithApi } from '@/features/auth/server/api';
 import {
   createSession,
   setSessionCookie,
 } from '@/features/auth/server/session';
+import { login as loginRequest } from '@/libs/api';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -38,36 +38,32 @@ export async function POST(request: Request) {
     );
   }
 
-  try {
-    const { message, result } = await loginWithApi(parsed.data);
+  const result = await loginRequest(parsed.data);
 
-    if (result.twoFactorRequired) {
-      return NextResponse.json(
-        { message, twoFactorRequired: true },
-        { status: 403 },
-      );
-    }
-
-    const { session, maxAge } = createSession(
-      result.userData,
-      result.accessToken,
-      result.expiresIn,
-      result.rolesList,
-    );
-    await setSessionCookie(session, maxAge);
-
-    return NextResponse.json({ user: session.user, message });
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return NextResponse.json(
-        { message: error.message },
-        { status: error.status >= 400 ? error.status : 401 },
-      );
-    }
-
+  if (!result.ok) {
     return NextResponse.json(
-      { message: 'Unable to sign in right now. Please try again.' },
-      { status: 502 },
+      { message: result.message },
+      { status: result.httpStatus >= 400 ? result.httpStatus : 401 },
     );
   }
+
+  const { twoFactorRequired, accessToken, expiresIn, userData, rolesList } =
+    result.data;
+
+  if (twoFactorRequired) {
+    return NextResponse.json(
+      { message: result.message, twoFactorRequired: true },
+      { status: 403 },
+    );
+  }
+
+  const { session, maxAge } = createSession(
+    userData,
+    accessToken,
+    expiresIn,
+    rolesList,
+  );
+  await setSessionCookie(session, maxAge);
+
+  return NextResponse.json({ user: session.user, message: result.message });
 }

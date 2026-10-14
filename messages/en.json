@@ -3,7 +3,8 @@
     "loading": "Loading...",
     "toggleTheme": "Toggle theme",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "refresh": "Refresh"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -11,7 +12,9 @@
     "settings": "Settings",
     "logout": "Logout",
     "workspace": "Workspace",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "users": "Users",
+    "products": "Products"
   },
   "auth": {
     "login": {
@@ -47,8 +50,50 @@
       "description": "View your account overview and recent activity."
     },
     "admin": {
-      "welcome": "Welcome back, {name}",
-      "description": "Monitor platform activity and manage your workspace."
+      "title": "Dashboard",
+      "description": "Live platform metrics across users, revenue and orders.",
+      "statsError": "Something went wrong while fetching the latest metrics. Please try again later.",
+      "metrics": {
+        "totalUsers": "Total Users",
+        "revenue30d": "Revenue",
+        "totalOrders": "Orders",
+        "openTickets": "Open Tickets"
+      },
+      "revenue": {
+        "title": "Revenue Overview",
+        "description": "Order value per day over the last 7 days.",
+        "empty": "No orders recorded in the last 7 days."
+      },
+      "orderStatus": {
+        "title": "Order Status Distribution",
+        "description": "{total} order(s) by status.",
+        "empty": "No orders to group yet.",
+        "states": {
+          "PENDING": "Pending",
+          "PENDING_TOKEN": "Awaiting token",
+          "CONFIRMED": "Confirmed",
+          "SHIPPED": "Shipped",
+          "OUT_FOR_DELIVERY": "Out for delivery",
+          "DELIVERED": "Delivered",
+          "CANCELLED": "Cancelled",
+          "RETURNED": "Returned"
+        }
+      },
+      "recentOrders": {
+        "title": "Recent Orders",
+        "description": "The eight most recent orders on this platform.",
+        "empty": "No orders yet.",
+        "order": "Order",
+        "vendor": "Vendor",
+        "amount": "Amount",
+        "status": "Status",
+        "date": "Date"
+      },
+      "growth": {
+        "title": "User Growth (Last 7 Days)",
+        "description": "New accounts created per day.",
+        "empty": "No new signups in the last 7 days."
+      }
     },
     "stats": {
       "totalUsers": "Total users",
@@ -62,6 +107,102 @@
       "pendingRefunds": "Pending refunds",
       "errorTitle": "Couldn't load dashboard stats",
       "errorDescription": "Something went wrong while fetching the latest metrics. Please try again later."
+    }
+  },
+  "users": {
+    "title": "User Management",
+    "description": "Manage users, roles and permissions.",
+    "statusActive": "Active",
+    "statusInactive": "Inactive",
+    "statusSuspended": "Suspended",
+    "loadError": "We couldn't load the user list. Please try refreshing.",
+    "noName": "Unnamed user",
+    "idLabel": "ID: {id}",
+    "actionFailed": "We couldn't update that user. Please try again.",
+    "statusUpdated": "User status updated.",
+    "stats": {
+      "total": "Total Users",
+      "active": "Active Users",
+      "newThisMonth": "New This Month",
+      "activeRate": "Active Rate"
+    },
+    "trends": {
+      "title": "User Registration Trends",
+      "description": "New accounts created in each of the last six months.",
+      "empty": "No registrations recorded yet."
+    },
+    "distribution": {
+      "title": "User Distribution",
+      "description": "{total} user(s) grouped by role.",
+      "empty": "No users to group yet.",
+      "unknownRole": "Unassigned"
+    },
+    "directory": {
+      "title": "Users Directory",
+      "description": "{total} user(s) on this platform.",
+      "searchPlaceholder": "Search users...",
+      "status": "All Status",
+      "statusAll": "All Status",
+      "role": "All Roles",
+      "roleAll": "All Roles",
+      "apply": "Apply",
+      "user": "User",
+      "lastActive": "Last Active",
+      "actions": "Actions",
+      "actionsFor": "Actions for {name}",
+      "suspend": "Suspend",
+      "activate": "Reactivate",
+      "empty": "No users match these filters.",
+      "showing": "Showing {from} to {to} of {total} results",
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
+  "products": {
+    "title": "Product Management",
+    "description": "Manage your product catalog and inventory.",
+    "loadError": "We couldn't load the catalog. Please try refreshing.",
+    "unnamed": "Unnamed product",
+    "skuLabel": "SKU: {sku}",
+    "units": "{count} units",
+    "statusActive": "Published",
+    "statusDraft": "Draft",
+    "statusInactive": "Inactive",
+    "statusArchived": "Archived",
+    "actionFailed": "We couldn't update that product. Please try again.",
+    "statusUpdated": "Product status updated.",
+    "stats": {
+      "total": "Total Products",
+      "inStock": "In Stock",
+      "lowStock": "Low Stock",
+      "totalValue": "Total Value"
+    },
+    "category": {
+      "title": "Category Distribution",
+      "description": "{total} product(s) grouped by category.",
+      "empty": "No products to group yet.",
+      "uncategorised": "Uncategorised"
+    },
+    "catalog": {
+      "title": "Product Catalog",
+      "description": "{total} product(s) on this platform.",
+      "searchPlaceholder": "Search products...",
+      "category": "All Categories",
+      "categoryAll": "All Categories",
+      "stock": "All Stock",
+      "stockAll": "All Stock",
+      "stockIn": "In stock only",
+      "apply": "Apply",
+      "product": "Product",
+      "price": "Price",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions",
+      "actionsFor": "Actions for {name}",
+      "empty": "No products match these filters.",
+      "showing": "Showing {from} to {to} of {total} results",
+      "previous": "Previous",
+      "next": "Next"
     }
   },
   "profile": {

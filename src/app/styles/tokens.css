@@ -60,6 +60,9 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
+  /* ========== Ripple ========== */
+  --ripple-color: rgb(92 75 235 / 0.5);
+
   /* ========== Spacing & Layout ========== */
   --app-header-height: 3.8125rem;
   --radius: 0.625rem;
@@ -138,6 +141,9 @@
   --browser-chrome-top: var(--background);
   --glow-accent: rgba(118, 99, 255, 0.28);
   --glow-accent-subtle: rgba(118, 99, 255, 0.14);
+
+  /* ========== Ripple ========== */
+  --ripple-color: rgb(92 75 235 / 0.5);
 }
 
 /* ============================================
@@ -195,4 +201,5 @@
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-ripple: ripple-expand 600ms ease-out;
 }

@@ -29,6 +29,8 @@ import {
   ArrowUUpLeft,
   WarningCircle,
   Clock,
+  ArrowClockwise,
+  MagnifyingGlass,
   ArrowUUpRight,
 } from '@phosphor-icons/react';
 import type { ComponentProps } from 'react';
@@ -62,6 +64,8 @@ export const Icons = {
   returns: ArrowUUpLeft,
   warning: WarningCircle,
   clock: Clock,
+  refresh: ArrowClockwise,
+  search: MagnifyingGlass,
   refund: ArrowUUpRight,
 } as const;
 

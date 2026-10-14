@@ -1,6 +1,7 @@
+import type { ApiUserData } from '@/libs/models';
 import { describe, expect, it } from 'vitest';
 
-import { buildAuthUser, type ApiUserData } from './map-user';
+import { buildAuthUser } from './map-user';
 
 const baseUser: ApiUserData = {
   userId: 'user_1',

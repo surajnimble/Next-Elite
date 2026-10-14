@@ -3,6 +3,7 @@
   "entry": [
     "src/app/**/{page,layout,loading,error,not-found,template,default,sitemap,robots,manifest,route}.{ts,tsx}",
     "src/libs/query-client.ts",
+    "src/libs/api/*.ts",
     "src/features/auth/hooks/*.tsx",
     "src/features/auth/server/*.ts",
     "src/features/auth/rbac/*.ts",
@@ -26,7 +27,6 @@
     "@radix-ui/react-popover",
     "@radix-ui/react-progress",
     "@radix-ui/react-radio-group",
-    "@radix-ui/react-select",
     "@radix-ui/react-tabs",
     "@radix-ui/react-toggle",
     "@radix-ui/react-toggle-group",

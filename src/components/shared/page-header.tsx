@@ -1,11 +1,22 @@
+'use client';
+
+import { Icon } from '@/components/icons/app-icons';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/libs/utils';
-import type { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useTransition, type ReactNode } from 'react';
 
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
   actions?: ReactNode;
   className?: string;
+  /** Shows a refresh button that re-runs the server render for this route. */
+  showRefresh?: boolean;
+  /** Override the default `router.refresh()`. Client-side handler only. */
+  onRefresh?: () => void;
+  refreshing?: boolean;
 }
 
 export function PageHeader({
@@ -13,7 +24,24 @@ export function PageHeader({
   subtitle,
   actions,
   className,
+  showRefresh = false,
+  onRefresh,
+  refreshing = false,
 }: PageHeaderProps) {
+  const t = useTranslations('common');
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleRefresh = () => {
+    if (onRefresh) {
+      onRefresh();
+      return;
+    }
+    startTransition(() => router.refresh());
+  };
+
+  const busy = refreshing || isPending;
+
   return (
     <div
       className={cn(
@@ -31,8 +59,27 @@ export function PageHeader({
           </p>
         ) : null}
       </div>
-      {actions ? (
-        <div className="flex shrink-0 items-center gap-2">{actions}</div>
+
+      {actions || showRefresh ? (
+        <div className="flex shrink-0 items-center gap-2">
+          {actions}
+          {showRefresh ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              title={t('refresh')}
+              aria-label={t('refresh')}
+              onClick={handleRefresh}
+              disabled={busy}
+            >
+              <Icon
+                name="refresh"
+                className={cn('size-4', busy && 'animate-spin')}
+              />
+            </Button>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

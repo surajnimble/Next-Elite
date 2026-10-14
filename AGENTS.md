@@ -113,6 +113,7 @@ Authoritative list lives in `package.json`. Highlights (do not downgrade without
 10. **Conventional Commits only.** Commitlint enforces it (`feat:`, `fix:`, `docs:`, `chore:`, …). Body lines max 200 chars.
 11. **Don't break the type-contract of i18n/auth.** `src/global.d.ts` makes `t()` keys and locales compile-time typed. Renaming a key without updating every message file breaks `tsc`.
 12. **Keep Knip green.** New files must be reachable from an entry (a route, the alias graph, or an explicit `knip.json` entry). Orphaned files fail `npm run knip`. `src/components/ui/**` is currently the only ignore.
+13. **All backend traffic goes through `@/libs/api`.** Never `fetch` the API directly, never re-create a feature-local `api.ts`, and never let a call throw — handle the `ApiResult<T>` union. See §7.5.
 
 ---
 
@@ -204,7 +205,7 @@ Authoritative list lives in `package.json`. Highlights (do not downgrade without
 │   │   ├── i18n/                   next-intl request config, routing, RTL helper
 │   │   └── site/                   siteConfig (JSON + Zod), locale utilities
 │   ├── hooks/                      Shared React hooks
-│   ├── libs/                       Cross-cutting infra (env, query client, cn)
+│   ├── libs/                       Cross-cutting infra (env, query client, api layer, cn)
 │   ├── global.d.ts                 next-intl type augmentation
 │   ├── instrumentation.ts          Server Sentry init
 │   └── instrumentation-client.ts   Client Sentry init
@@ -283,22 +284,23 @@ Authoritative list lives in `package.json`. Highlights (do not downgrade without
 
 **`features/auth`**
 
-| File                      | Purpose                                                                                                                                                                                                                             |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `server/api.ts`           | `'server-only'`. `loginWithApi()` calls the backend `POST /api/v1/auth/login` and returns `{ message, result }`; `logoutWithApi(accessToken?)` calls the backend `POST /api/v1/auth/logout`. `ApiError` carries the status/message. |
-| `server/session.ts`       | `'server-only'`. `createSession()`, `setSessionCookie()`/`clearSessionCookie()` (httpOnly cookie `next-elite.session`), and the request-cached `getSession()` / `getCurrentUser()`.                                                 |
-| `lib/map-user.ts`         | `buildAuthUser(userData, rolesList)` maps the API `userData` payload to `AuthUser` (role + permissions). Pure, unit-tested.                                                                                                         |
-| `lib/device.ts`           | `getDeviceData(locale)` builds the `deviceData` block the login endpoint expects (persists a device id in `localStorage`). Client-only.                                                                                             |
-| `hooks/auth-provider.tsx` | `'use client'`. `AuthProvider` (holds user + auth actions) and `useAuth()`. Seeds from `initialUser`; exposes `signIn` (`POST /api/auth/login`), `signOut`, `hasPermission`.                                                        |
-| `rbac/permissions.ts`     | `UserRole = 'admin' \| 'user'`; `AuthPermission = 'dashboard.view:user' \| 'dashboard.view:admin'`. **Add new permissions here.**                                                                                                   |
-| `rbac/roles.ts`           | `ROLE_PERMISSIONS` map (`as const satisfies Record<UserRole, readonly AuthPermission[]>`), `getPermissionsForRole()`, `getRoleFromApiRoles(roles)` (admin when any API role contains `ADMIN`, else `user`).                         |
-| `rbac/can.ts`             | `hasPermission(permissions, permission)` — pure. Used on server _and_ client.                                                                                                                                                       |
-| `rbac/require.ts`         | `'server-only'` (calls `redirect()`). `requireUser(redirectTo = '/')` and `requirePermission(permission, redirectTo = '/unauthorized')` for the `(protected)` group.                                                                |
-| `types.ts`                | `AuthUser { id, name, email, phone, avatarUrl, role, apiRoles, permissions }`; re-exports `AuthPermission`, `UserRole`.                                                                                                             |
-| `schemas/login.ts`        | Zod login schema + `LoginInput` type.                                                                                                                                                                                               |
-| `*.test.ts`               | Colocated unit tests (`roles.test.ts`, `login.test.ts`, `map-user.test.ts`).                                                                                                                                                        |
+| File                      | Purpose                                                                                                                                                                                                     |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `server/session.ts`       | `'server-only'`. `createSession()`, `setSessionCookie()`/`clearSessionCookie()` (httpOnly cookie `next-elite.session`), and the request-cached `getSession()` / `getCurrentUser()`.                         |
+| `lib/map-user.ts`         | `buildAuthUser(userData, rolesList)` maps the API `userData` payload to `AuthUser` (role + permissions). Pure, unit-tested.                                                                                 |
+| `lib/device.ts`           | `getDeviceData(locale)` builds the `deviceData` block the login endpoint expects (persists a device id in `localStorage`). Client-only.                                                                     |
+| `hooks/auth-provider.tsx` | `'use client'`. `AuthProvider` (holds user + auth actions) and `useAuth()`. Seeds from `initialUser`; exposes `signIn` (`POST /api/auth/login`), `signOut`, `hasPermission`.                                |
+| `rbac/permissions.ts`     | `UserRole = 'admin' \| 'user'`; `AuthPermission = 'dashboard.view:user' \| 'dashboard.view:admin'`. **Add new permissions here.**                                                                           |
+| `rbac/roles.ts`           | `ROLE_PERMISSIONS` map (`as const satisfies Record<UserRole, readonly AuthPermission[]>`), `getPermissionsForRole()`, `getRoleFromApiRoles(roles)` (admin when any API role contains `ADMIN`, else `user`). |
+| `rbac/can.ts`             | `hasPermission(permissions, permission)` — pure. Used on server _and_ client.                                                                                                                               |
+| `rbac/require.ts`         | `'server-only'` (calls `redirect()`). `requireUser(redirectTo = '/')` and `requirePermission(permission, redirectTo = '/unauthorized')` for the `(protected)` group.                                        |
+| `types.ts`                | `AuthUser { id, name, email, phone, avatarUrl, role, apiRoles, permissions }`; re-exports `AuthPermission`, `UserRole`.                                                                                     |
+| `schemas/login.ts`        | Zod login schema + `LoginInput` type.                                                                                                                                                                       |
+| `*.test.ts`               | Colocated unit tests (`roles.test.ts`, `login.test.ts`, `map-user.test.ts`).                                                                                                                                |
 
 > **Removed:** the `demo/` module, all social-login code and the entire BetterAuth integration (`lib/auth.ts`, `lib/auth-client.ts`, `api/auth/[...all]`). `rbac/require.ts` was re-added for the `(protected)` group (§10).
+>
+> **Moved:** `server/api.ts` (`loginWithApi`, `logoutWithApi`, `ApiError`) is gone — every backend call now goes through the global `@/libs/api` layer (§7.5). Only the session cookie lives in `server/session.ts`.
 
 **`features/i18n`**
 
@@ -318,13 +320,13 @@ Authoritative list lives in `package.json`. Highlights (do not downgrade without
 
 **`features/dashboard`**
 
-| File                                       | Purpose                                                                                                                                                                  |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `types.ts`                                 | `DashboardStats` — platform metrics returned by the backend.                                                                                                             |
-| `server/api.ts`                            | `'server-only'`. `getDashboardStats(accessToken?)` calls the backend `GET /api/v1/admin/getDashboardStats`; `DashboardApiError` carries the status/message.              |
-| `components/dashboard-stats-section.tsx`   | Server component. Reads the session, fetches the stats, and renders the grid or a translated error `Alert` (`dashboard.stats.errorTitle` / `errorDescription`).          |
-| `components/dashboard-stats-grid.tsx`      | `'use client'`. `DashboardStatsGrid` renders the `StatCard` grid with locale-formatted values; `DashboardStatsSkeleton` is the loading placeholder used by `<Suspense>`. |
-| `components/dashboard-stats-grid.test.tsx` | Colocated component test (labels + number formatting).                                                                                                                   |
+| File                                       | Purpose                                                                                                                                                                                     |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/dashboard-stats-section.tsx`   | Server component. Reads the session, calls `getDashboardStats()` from `@/libs/api`, and renders the grid or a translated error `Alert` (`dashboard.stats.errorTitle` / `errorDescription`). |
+| `components/dashboard-stats-grid.tsx`      | `'use client'`. `DashboardStatsGrid` renders the `StatCard` grid with locale-formatted values; `DashboardStatsSkeleton` is the loading placeholder used by `<Suspense>`.                    |
+| `components/dashboard-stats-grid.test.tsx` | Colocated component test (card count, labels + number formatting).                                                                                                                          |
+
+> The `DashboardStats` type and the `getDashboardStats()` call both live in the global API layer (§7.5), **not** here. Keys live under `dashboard.stats.*` in both message catalogs.
 
 > The `(protected)/@admin/dashboard` page renders `<DashboardStatsSection />` inside `<Suspense fallback={<DashboardStatsSkeleton />}>`. Keys live under `dashboard.stats.*` in both message catalogs.
 
@@ -354,14 +356,85 @@ Authoritative list lives in `package.json`. Highlights (do not downgrade without
 | `libs/env.ts`                | `@t3-oss/env-nextjs` schema. Server: `API_BASE_URL` (backend auth base URL, defaults to `DEFAULT_API_BASE_URL`), `SENTRY_DSN`. Client: `NEXT_PUBLIC_APP_URL`. Skips validation when `SKIP_ENV_VALIDATION` or `npm run lint`. |
 | `libs/query-client.ts`       | `getQueryClient()`: fresh client on server, singleton in browser. Defaults: `staleTime 60s`, `gcTime 5min`, `refetchOnWindowFocus false`, `retry 1`.                                                                         |
 | `libs/utils.ts`              | `cn(...)` = `twMerge(clsx(...))`.                                                                                                                                                                                            |
+| `libs/api/**`                | **The one global API layer.** See the table below.                                                                                                                                                                           |
 | `libs/*.test.ts`             | `env.test.ts`, `utils.test.ts`.                                                                                                                                                                                              |
 | `instrumentation.ts`         | Server Sentry init (node + edge), `onRequestError`.                                                                                                                                                                          |
 | `instrumentation-client.ts`  | Client Sentry init, router transition hook.                                                                                                                                                                                  |
 | `global.d.ts`                | Augments `next-intl` with `Locale` (from routing) and `Messages` (from `messages/en.json`).                                                                                                                                  |
 
+#### The API layer — `src/libs/api/`
+
+One global, **server-only** layer for every backend call. It deliberately mirrors the `nails-ar-android` project (`rest/` + `data/` packages) so both codebases read the same way.
+
+| File              | Android equivalent                                                         | Purpose                                                                                                                                                                                                                                 |
+| ----------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `api-urls.ts`     | `rest/ApiUrls.kt`                                                          | Flat `API_URLS` object — **every** endpoint path in one place, each key named after the function that calls it. Bare paths; the version prefix lives in `API_BASE_URL`.                                                                 |
+| `requests.ts`     | `data/requests/ApiRequest.kt`                                              | Everything **sent** to the backend: the shared `ApiRequest` (all fields optional) and `LoginDeviceData`.                                                                                                                                |
+| `responses.ts`    | `data/responses/BaseResponse.kt`                                           | The `BaseResponse<T>` envelope, plus each response as a **defaults object** (`API_USER_DATA`, `LOGIN_RESULT`, `DASHBOARD_STATS`, …) that defines both its shape and its fallback values. `withDefaults()` merges a raw payload into it. |
+| `defaults.ts`     | Kotlin `data class` defaults                                               | `Normalized<D>` (derive a response type from its defaults object) + `withDefaults()` (merge a raw payload into it). Pure mechanics, no API knowledge.                                                                                   |
+| `types.ts`        | `rest/ServerCallback.kt`, `rest/Exceptions.kt`, `data/model/Encrypted*.kt` | Transport plumbing shared by both sides: `ApiResult<T>` + `isApiSuccess()`, `ApiErrorKind`, `EncryptedRequest`/`EncryptedResponse`, `HttpMethod`, `ApiRequestOptions`.                                                                  |
+| `rest-adapter.ts` | `rest/RestAdapter.kt`                                                      | The single HTTP client: base URL, default headers, automatic `Authorization: Bearer`, 15 s timeout, dev logging, `handleResponse()` and HTTP-status → `ApiErrorKind` mapping. Never throws.                                             |
+| `rest.ts`         | `rest/Rest.kt`                                                             | **One exported function per endpoint** (`login`, `logout`, `getDashboardStats`, …). The only file you edit to add a call.                                                                                                               |
+| `crypto.ts`       | `pref/encrypt/GCMEncryptor.kt`, `encrytion/EncryptionExt.kt`               | AES-256-GCM `encryptPayload()` / `decryptPayload()` using the Android wire format `base64(iv)]base64(ciphertext‖authTag)`. Needs `API_ENCRYPTION_KEY`.                                                                                  |
+| `index.ts`        | —                                                                          | Public barrel. Always `import { … } from '@/libs/api'`.                                                                                                                                                                                 |
+| `*.test.ts`       | —                                                                          | Colocated tests (crypto round-trip, URL building, bearer header, status → error-kind mapping, default filling).                                                                                                                         |
+
+> **Request aur response kabhi ek file me nahi.** Jo type bhejte ho → `requests.ts`; jo type receive karte ho (ya envelope) → `responses.ts`. `types.ts` sirf transport plumbing ke liye hai.
+
+**Response me `null`?** Har response ek **defaults object** se define hota hai — bilkul Android ke `data class ProfileData(val name: String = String.empty)` jaisa. `handleResponse()` har field ko us default se bharta hai, to `null`, missing field ya poora `result: null` bhi aaye to UI ko hamesha ready value milta hai:
+
+```ts
+export const DASHBOARD_STATS = {
+  totalUsers: 0,
+  totalVendors: 0,
+  revenue30d: 0,
+  /* … */
+} as const;
+
+export type DashboardStats = Normalized<typeof DASHBOARD_STATS>; // sab fields number, kabhi null nahi
+```
+
+`string → ''`, `number → 0`, `boolean → false`, `array → []`. Naya response add karte waqt defaults likh do — wahi se uska TypeScript type bhi banta hai, dobara likhna nahi padta.
+
+**API version badalna (v1 → v2):** sirf **ek** jagah edit karo — `API_BASE_URL` (`.env`), kyunki version prefix base URL me hai aur `API_URLS` me sirf bare paths hain:
+
+```
+API_BASE_URL=https://projectname-api.onrender.com/api/v1   # ← v2 ke liye api/v2
+```
+
+```ts
+export const API_URLS = {
+  login: 'auth/login',
+  logout: 'auth/logout',
+  getDashboardStats: 'admin/getDashboardStats',
+} as const satisfies Record<string, `${string}/${string}`>;
+```
+
+`ApiUrlPattern`-style guard yahan nahi chahiye kyunki version `API_URLS` me nahi hai. Default `DEFAULT_API_BASE_URL` `src/libs/env.ts` me hai.
+
+**Usage**
+
+```ts
+import { getDashboardStats, isApiSuccess } from '@/libs/api';
+import { getSession } from '@/features/auth/server/session';
+
+const session = await getSession();
+const result = await getDashboardStats({ token: session?.accessToken });
+
+if (!isApiSuccess(result)) return <Error message={result.message} />;
+return <Grid stats={result.data} />;
+```
+
+**Rules**
+
+- **Never** call `fetch` for the backend outside this layer, and never add a feature-local `api.ts` again.
+- The layer returns `ApiResult<T>` and **never throws** — branch on `isApiSuccess()` instead of `try/catch`.
+- Pass the access token explicitly via `{ token }`; it comes from `getSession()` and is never exposed to the browser.
+- `ApiRequestOptions`: `token`, `query`, `headers`, `timeoutMs`, `encrypted`.
+
 ### 7.6 `messages/`
 
-Two catalogs: `en` and `hi`. Namespace tree (see `en.json`): `common`, `navigation`, `auth.{login,logout,passwordReset,toast}`, `dashboard.{user,admin}`, `profile`, `settings`, `sidebar`, `errors`.
+Two catalogs: `en` and `hi`. Namespace tree (see `en.json`): `common`, `navigation`, `auth.{login,logout,passwordReset,toast}`, `dashboard.{user,admin,stats}`, `profile`, `settings`, `sidebar`, `errors`.
 
 > `messages/en.json` is the **type source**. Adding a key only there and not in `hi.json` still compiles, but Hindi will fall back / render the key path — keep both in sync (see §21.4).
 
@@ -374,7 +447,8 @@ Two catalogs: `en` and `hi`. Namespace tree (see `en.json`): `common`, `navigati
 | `tests/auth/roles.test.ts`         | Role resolution tests (distinct from `src/features/auth/rbac/roles.test.ts`).                                                                                                                |
 | `tests/i18n/routing.test.ts`       | `resolveLocale` / `isValidLocale`.                                                                                                                                                           |
 | `config/vitest.config.ts`          | jsdom, `tsconfigPaths: true`, `include: ['**/*.test.{ts,tsx}']`, excludes e2e/.next, sets `SKIP_ENV_VALIDATION=true`.                                                                        |
-| `config/vitest.setup.ts`           | jest-dom, `localStorage` + `matchMedia` mocks, and a `next/navigation` mock.                                                                                                                 |
+| `config/vitest.setup.ts`           | jest-dom, RTL `cleanup()` after each test, `localStorage` + `matchMedia` mocks, and a `next/navigation` mock.                                                                                |
+| `config/server-only.ts`            | Stub aliased over `server-only` in `vitest.config.ts` so server modules (the API layer) can be unit tested.                                                                                  |
 | `e2e/playwright.config.ts`         | `testDir: '.'`, `baseURL http://127.0.0.1:6767`, `webServer` = `npm run dev` (local) / `npm run start:standalone` (CI), waits on `/api/health`.                                              |
 | `e2e/auth.spec.ts`                 | Smoke: home/login screen, `/api/health` 200, `/dashboard` guest redirect, password-reset screen.                                                                                             |
 
@@ -614,7 +688,7 @@ export function Thing({ children, className }: ThingProps) {
 - Defaults: `staleTime 60s`, `gcTime 5min`, `refetchOnWindowFocus false`, `retry 1`. Override per query when needed.
 - **Where hooks go:** create `src/features/<feature>/hooks/use-<thing>.ts` (or `api/`) with `useQuery`/`useMutation`. Keep fetch functions beside them.
 - Server Components can fetch directly for initial render; use TanStack Query for client interactivity/caching, then hydrate if needed.
-- Server-side calls to your backend live in `src/features/<feature>/server/` (see `features/auth/server/api.ts`). There is **no** bundled browser API client/axios — add a fetch wrapper under `src/libs/` (e.g. `src/libs/api.ts`) if you need one; don't scatter raw `fetch` across components.
+- Server-side calls to your backend **must** go through the global `@/libs/api` layer (§7.5): add the path to `api-urls.ts`, the function to `rest.ts`, the types to `types.ts`. It returns `ApiResult<T>` and never throws — branch with `isApiSuccess()`. There is **no** raw `fetch` for the backend anywhere else.
 
 ---
 
@@ -636,12 +710,13 @@ Declared and validated in `src/libs/env.ts` (T3 Env + Zod). `.env.example` docum
 
 **Current variables**
 
-| Variable              | Scope  | Rule                                                       |
-| --------------------- | ------ | ---------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_URL` | client | Public URL (SEO, absolute links). Optional.                |
-| `API_BASE_URL`        | server | Backend auth base URL. Defaults to `DEFAULT_API_BASE_URL`. |
-| `SENTRY_DSN`          | server | Enables server Sentry.                                     |
-| `SKIP_ENV_VALIDATION` | build  | Skips T3 validation (used by tests/lint/CI).               |
+| Variable              | Scope  | Rule                                                                       |
+| --------------------- | ------ | -------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL` | client | Public URL (SEO, absolute links). Optional.                                |
+| `API_BASE_URL`        | server | Backend auth base URL. Defaults to `DEFAULT_API_BASE_URL`.                 |
+| `SENTRY_DSN`          | server | Enables server Sentry.                                                     |
+| `API_ENCRYPTION_KEY`  | server | Base64 32-byte key for the `{ encryptedData }` API layer (§7.5). Optional. |
+| `SKIP_ENV_VALIDATION` | build  | Skips T3 validation (used by tests/lint/CI).                               |
 
 > **Removed:** `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `AUTH_ADMIN_EMAILS` (no BetterAuth), `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED` (no OAuth) and `NEXT_PUBLIC_DEMO_MODE` (no demo module).
 
@@ -815,7 +890,8 @@ Keep all locale files structurally identical; missing keys degrade UX and can su
 1. Create `src/app/api/<path>/route.ts`.
 2. Export HTTP handlers (`export async function GET/POST/...`), return `Response.json(...)` / `NextResponse`.
 3. Validate input with Zod; guard with `getCurrentUser()` (route handlers can't use `redirect()` the same way — return `401/403` responses).
-4. Add Playwright coverage if it is a public contract.
+4. Call the backend through `@/libs/api` (§7.5) and branch on `isApiSuccess()` — do **not** wrap it in `try/catch`, it never throws.
+5. Add Playwright coverage if it is a public contract.
 
 ### 21.9 Add / remove a social login provider
 
@@ -823,6 +899,15 @@ Keep all locale files structurally identical; missing keys degrade UX and can su
 2. Expose a client action in `src/features/auth/hooks/auth-provider.tsx` (mirror `signIn`).
 3. Add the button + a translated label to `login-form.tsx` and both message catalogs.
 4. To **remove** one, delete the button, the client action, the server route, the env vars, and any brand SVG icon.
+
+### 21.10 Add a backend endpoint (the `@/libs/api` layer)
+
+1. Add one line to `API_URLS` in `src/libs/api/api-urls.ts` (bare path, no `api/v1` prefix — that lives in `API_BASE_URL`), with the key named after the function you'll add.
+2. Add a defaults object to `src/libs/api/responses.ts` and derive the type from it — that doubles as the "response me null" fallback.
+3. Add its request fields to `ApiRequest` in `src/libs/api/requests.ts`.
+4. Add one exported function in `src/libs/api/rest.ts` that calls `apiFetch(DEFAULTS, method, API_URLS.yourKey, body, options)` and returns `ApiResult<T>`. Pass the bearer token as `{ token }`.
+5. Add a colocated test in `src/libs/api/*.test.ts`.
+6. Consume it from a Server Component with `isApiSuccess(result)` — never from a client component (the layer is server-only).
 
 ---
 
@@ -841,6 +926,12 @@ Keep all locale files structurally identical; missing keys degrade UX and can su
 | A server-only data helper           | `src/features/<feature>/server/` (mark `import 'server-only'`)                      |
 | A shared app-wide hook              | `src/hooks/`                                                                        |
 | Infra (env, query client, cn, http) | `src/libs/`                                                                         |
+| A backend endpoint path             | `src/libs/api/api-urls.ts`                                                          |
+| A backend call / method             | `src/libs/api/rest.ts` (returns `ApiResult<T>`)                                     |
+| A **request** type                  | `src/libs/api/requests.ts`                                                          |
+| A **response** type / envelope      | `src/libs/api/responses.ts`                                                         |
+| Default-value / normalization logic | `src/libs/api/defaults.ts`                                                          |
+| Transport plumbing (`ApiResult`, …) | `src/libs/api/types.ts`                                                             |
 | A permission literal                | `src/features/auth/rbac/permissions.ts`                                             |
 | A role→permission rule              | `src/features/auth/rbac/roles.ts`                                                   |
 | A translation key                   | both `messages/en.json` and `messages/hi.json`                                      |

@@ -1,5 +1,13 @@
 import '@testing-library/jest-dom/vitest';
-import { vi } from 'vitest';
+import { cleanup } from '@testing-library/react';
+import { afterEach, vi } from 'vitest';
+
+// Vitest runs without `globals: true`, so Testing Library cannot register its
+// own auto-cleanup. Without it the DOM accumulates across tests in a file and
+// `getBy*` starts matching elements from earlier renders.
+afterEach(() => {
+  cleanup();
+});
 
 const localStorageMock = (() => {
   let store: Record<string, string> = {};

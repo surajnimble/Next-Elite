@@ -2,8 +2,9 @@ import 'server-only';
 
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-import { buildAuthUser, type ApiUserData } from '../lib/map-user';
+import { buildAuthUser } from '../lib/map-user';
 import type { AuthUser } from '../types';
+import type { ApiUserData } from '@/libs/models';
 
 export const SESSION_COOKIE_NAME = 'next-elite.session';
 

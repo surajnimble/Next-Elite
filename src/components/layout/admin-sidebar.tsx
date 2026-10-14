@@ -72,6 +72,20 @@ export function AdminSidebar() {
         permission: 'dashboard.view:admin',
       },
       {
+        id: 'admin-users',
+        label: t('navigation.users'),
+        href: '/users',
+        icon: 'users',
+        permission: 'dashboard.view:admin',
+      },
+      {
+        id: 'admin-products',
+        label: t('navigation.products'),
+        href: '/products',
+        icon: 'package',
+        permission: 'dashboard.view:admin',
+      },
+      {
         id: 'admin-profile',
         label: t('navigation.profile'),
         href: '/profile',
@@ -91,6 +105,8 @@ export function AdminSidebar() {
   }, [adminNavItems, user]);
 
   const dashboardItem = filteredNav.find((i) => i.id === 'admin-dashboard');
+  const usersItem = filteredNav.find((i) => i.id === 'admin-users');
+  const productsItem = filteredNav.find((i) => i.id === 'admin-products');
   const profileItem = filteredNav.find((i) => i.id === 'admin-profile');
 
   const workspaceLabel = t.has('navigation.workspace')
@@ -204,6 +220,56 @@ export function AdminSidebar() {
               </CollapsibleContent>
             </SidebarMenuItem>
           </Collapsible>
+
+          {usersItem ? (
+            <SidebarMenuItem key={usersItem.id}>
+              <SidebarMenuButton
+                asChild
+                isActive={
+                  pathname === usersItem.href ||
+                  pathname.startsWith(`${usersItem.href}/`)
+                }
+                tooltip={usersItem.label}
+                onClick={onItemClick}
+              >
+                <Link href={usersItem.href}>
+                  <Icon
+                    name={usersItem.icon}
+                    className="size-4.5 shrink-0"
+                    weight="fill"
+                  />
+                  <span className="truncate whitespace-nowrap transition-all duration-300 group-data-[state=collapsed]:pointer-events-none group-data-[state=collapsed]:w-0 group-data-[state=collapsed]:opacity-0">
+                    {usersItem.label}
+                  </span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ) : null}
+
+          {productsItem ? (
+            <SidebarMenuItem key={productsItem.id}>
+              <SidebarMenuButton
+                asChild
+                isActive={
+                  pathname === productsItem.href ||
+                  pathname.startsWith(`${productsItem.href}/`)
+                }
+                tooltip={productsItem.label}
+                onClick={onItemClick}
+              >
+                <Link href={productsItem.href}>
+                  <Icon
+                    name={productsItem.icon}
+                    className="size-4.5 shrink-0"
+                    weight="fill"
+                  />
+                  <span className="truncate whitespace-nowrap transition-all duration-300 group-data-[state=collapsed]:pointer-events-none group-data-[state=collapsed]:w-0 group-data-[state=collapsed]:opacity-0">
+                    {productsItem.label}
+                  </span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ) : null}
 
           {profileItem ? (
             <SidebarMenuItem key={profileItem.id}>

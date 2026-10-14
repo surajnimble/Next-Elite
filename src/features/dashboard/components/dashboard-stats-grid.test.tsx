@@ -1,31 +1,34 @@
 import { renderWithProviders, screen } from '@tests/utils/render';
 import { describe, expect, it } from 'vitest';
-import type { DashboardStats } from '../types';
-import { DashboardStatsGrid } from './dashboard-stats-grid';
+import {
+  DashboardStatsGrid,
+  type DashboardMetric,
+} from './dashboard-stats-grid';
 
-const stats: DashboardStats = {
-  totalUsers: 5,
-  totalVendors: 1,
-  pendingVendors: 0,
-  totalProducts: 4,
-  totalOrders: 0,
-  revenue30d: 1234.5,
-  openTickets: 0,
-  pendingReturns: 0,
-  pendingRefunds: 0,
-};
+const metrics: DashboardMetric[] = [
+  { key: 'totalUsers', icon: 'users', value: 12441 },
+  { key: 'revenue30d', icon: 'currency', value: 54320 },
+  { key: 'totalOrders', icon: 'cart', value: 1852 },
+  { key: 'openTickets', icon: 'ticket', value: 0 },
+];
 
 describe('DashboardStatsGrid', () => {
-  it('renders every metric with its translated label and formatted value', () => {
-    renderWithProviders(<DashboardStatsGrid stats={stats} />);
+  it('renders one stat card per metric', () => {
+    const { container } = renderWithProviders(
+      <DashboardStatsGrid metrics={metrics} />,
+    );
 
-    expect(screen.getByText('Total users')).toBeInTheDocument();
-    expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('Total vendors')).toBeInTheDocument();
-    expect(screen.getByText('Total products')).toBeInTheDocument();
-    expect(screen.getByText('4')).toBeInTheDocument();
-    expect(screen.getByText('Revenue (30 days)')).toBeInTheDocument();
-    expect(screen.getByText('1,234.5')).toBeInTheDocument();
-    expect(screen.getByText('Pending refunds')).toBeInTheDocument();
+    expect(container.querySelectorAll('[data-slot="stat-card"]')).toHaveLength(
+      4,
+    );
+  });
+
+  it('formats counts and currency per key', () => {
+    renderWithProviders(<DashboardStatsGrid metrics={metrics} />);
+
+    expect(screen.getByText('Total Users')).toBeInTheDocument();
+    expect(screen.getByText('12,441')).toBeInTheDocument();
+    expect(screen.getByText('1,852')).toBeInTheDocument();
+    expect(screen.getByText('$54,320.00')).toBeInTheDocument();
   });
 });
