@@ -86,6 +86,27 @@ export function AdminSidebar() {
         permission: 'dashboard.view:admin',
       },
       {
+        id: 'admin-orders',
+        label: t('navigation.orders'),
+        href: '/orders',
+        icon: 'cart',
+        permission: 'dashboard.view:admin',
+      },
+      {
+        id: 'admin-features',
+        label: t('navigation.features'),
+        href: '/features',
+        icon: 'kanban',
+        permission: 'dashboard.view:admin',
+      },
+      {
+        id: 'admin-admins',
+        label: t('navigation.admins'),
+        href: '/admins',
+        icon: 'users',
+        permission: 'dashboard.view:admin',
+      },
+      {
         id: 'admin-profile',
         label: t('navigation.profile'),
         href: '/profile',
@@ -107,6 +128,9 @@ export function AdminSidebar() {
   const dashboardItem = filteredNav.find((i) => i.id === 'admin-dashboard');
   const usersItem = filteredNav.find((i) => i.id === 'admin-users');
   const productsItem = filteredNav.find((i) => i.id === 'admin-products');
+  const ordersItem = filteredNav.find((i) => i.id === 'admin-orders');
+  const featuresItem = filteredNav.find((i) => i.id === 'admin-features');
+  const adminsItem = filteredNav.find((i) => i.id === 'admin-admins');
   const profileItem = filteredNav.find((i) => i.id === 'admin-profile');
 
   const workspaceLabel = t.has('navigation.workspace')
@@ -265,6 +289,81 @@ export function AdminSidebar() {
                   />
                   <span className="truncate whitespace-nowrap transition-all duration-300 group-data-[state=collapsed]:pointer-events-none group-data-[state=collapsed]:w-0 group-data-[state=collapsed]:opacity-0">
                     {productsItem.label}
+                  </span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ) : null}
+
+          {ordersItem ? (
+            <SidebarMenuItem key={ordersItem.id}>
+              <SidebarMenuButton
+                asChild
+                isActive={
+                  pathname === ordersItem.href ||
+                  pathname.startsWith(`${ordersItem.href}/`)
+                }
+                tooltip={ordersItem.label}
+                onClick={onItemClick}
+              >
+                <Link href={ordersItem.href}>
+                  <Icon
+                    name={ordersItem.icon}
+                    className="size-4.5 shrink-0"
+                    weight="fill"
+                  />
+                  <span className="truncate whitespace-nowrap transition-all duration-300 group-data-[state=collapsed]:pointer-events-none group-data-[state=collapsed]:w-0 group-data-[state=collapsed]:opacity-0">
+                    {ordersItem.label}
+                  </span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ) : null}
+
+          {featuresItem ? (
+            <SidebarMenuItem key={featuresItem.id}>
+              <SidebarMenuButton
+                asChild
+                isActive={
+                  pathname === featuresItem.href ||
+                  pathname.startsWith(`${featuresItem.href}/`)
+                }
+                tooltip={featuresItem.label}
+                onClick={onItemClick}
+              >
+                <Link href={featuresItem.href}>
+                  <Icon
+                    name={featuresItem.icon}
+                    className="size-4.5 shrink-0"
+                    weight="fill"
+                  />
+                  <span className="truncate whitespace-nowrap transition-all duration-300 group-data-[state=collapsed]:pointer-events-none group-data-[state=collapsed]:w-0 group-data-[state=collapsed]:opacity-0">
+                    {featuresItem.label}
+                  </span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ) : null}
+
+          {adminsItem ? (
+            <SidebarMenuItem key={adminsItem.id}>
+              <SidebarMenuButton
+                asChild
+                isActive={
+                  pathname === adminsItem.href ||
+                  pathname.startsWith(`${adminsItem.href}/`)
+                }
+                tooltip={adminsItem.label}
+                onClick={onItemClick}
+              >
+                <Link href={adminsItem.href}>
+                  <Icon
+                    name={adminsItem.icon}
+                    className="size-4.5 shrink-0"
+                    weight="fill"
+                  />
+                  <span className="truncate whitespace-nowrap transition-all duration-300 group-data-[state=collapsed]:pointer-events-none group-data-[state=collapsed]:w-0 group-data-[state=collapsed]:opacity-0">
+                    {adminsItem.label}
                   </span>
                 </Link>
               </SidebarMenuButton>

@@ -14,7 +14,10 @@
     "workspace": "Workspace",
     "analytics": "Analytics",
     "users": "Users",
-    "products": "Products"
+    "products": "Products",
+    "orders": "Orders",
+    "features": "Features",
+    "admins": "Team"
   },
   "auth": {
     "login": {
@@ -205,6 +208,65 @@
       "next": "Next"
     }
   },
+  "orders": {
+    "title": "Order Management",
+    "description": "Track orders, manage fulfillment, and analyze sales.",
+    "loadError": "We couldn't load your orders. Please try refreshing.",
+    "idLabel": "ID: {id}",
+    "itemsLabel": "{count} items",
+    "unitsLabel": "{count} units",
+    "vendorLabel": "{count} vendors",
+    "noVendor": "No vendor",
+    "stats": {
+      "total": "Total Orders",
+      "pending": "Pending",
+      "shipped": "Shipped",
+      "revenue": "Revenue",
+      "pendingHint": "Needs attention",
+      "shippedHint": "In transit"
+    },
+    "trends": {
+      "title": "Order Trends",
+      "description": "Orders placed in each of the last six months.",
+      "empty": "No orders placed yet."
+    },
+    "statusDistribution": {
+      "title": "Order Status",
+      "description": "{total} order(s) grouped by status.",
+      "empty": "No orders to group yet."
+    },
+    "statuses": {
+      "PENDING": "Pending",
+      "PENDING_TOKEN": "Token Due",
+      "CONFIRMED": "Processing",
+      "SHIPPED": "Shipped",
+      "OUT_FOR_DELIVERY": "Out for Delivery",
+      "DELIVERED": "Delivered",
+      "CANCELLED": "Cancelled",
+      "RETURNED": "Returned"
+    },
+    "table": {
+      "title": "Orders",
+      "description": "{total} order(s) on this platform.",
+      "searchPlaceholder": "Search orders...",
+      "status": "All Status",
+      "statusAll": "All Status",
+      "from": "From",
+      "to": "To",
+      "apply": "Apply",
+      "clear": "Clear",
+      "order": "Order",
+      "vendor": "Vendor",
+      "items": "Items",
+      "status": "Status",
+      "total": "Total",
+      "date": "Date",
+      "empty": "No orders match these filters.",
+      "showing": "Showing {from} to {to} of {total} results",
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
   "profile": {
     "title": "Profile",
     "description": "View and update your personal account information.",
@@ -222,7 +284,548 @@
   },
   "settings": {
     "title": "Settings",
-    "description": "Manage your workspace settings and preferences."
+    "description": "Manage your application preferences and configuration.",
+    "loadError": "We couldn't load your settings. Please try refreshing.",
+    "saveFailed": "We couldn't save that setting. Please try again.",
+    "saved": "Settings saved.",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "discard": "Discard",
+    "readOnly": "You have read-only access to these settings.",
+    "selectPlaceholder": "Select an option",
+    "tabs": {
+      "general": "General",
+      "appearance": "Appearance",
+      "notifications": "Notifications",
+      "privacy": "Privacy",
+      "storage": "Storage",
+      "all": "All Settings"
+    },
+    "general": {
+      "title": "General Settings",
+      "description": "Configure basic application preferences and behavior"
+    },
+    "workspace": {
+      "title": "Workspace",
+      "description": "Preferences that stay on this device"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "description": "Choose how the interface looks and feels"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Choose how and when we notify you"
+    },
+    "privacy": {
+      "title": "Privacy & Security",
+      "description": "Control what the platform remembers about your sessions and devices"
+    },
+    "adminOnly": {
+      "title": "Managed by an administrator",
+      "description": "These settings are platform-wide and can only be changed by an administrator."
+    },
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "densities": {
+      "comfortable": "Comfortable",
+      "compact": "Compact"
+    },
+    "fields": {
+      "language": {
+        "label": "Application Language",
+        "description": "Choose your preferred language for the interface"
+      },
+      "timezone": {
+        "label": "Timezone",
+        "description": "Set your local timezone for accurate timestamps"
+      },
+      "dateFormat": {
+        "label": "Date Format",
+        "description": "Choose how dates are displayed throughout the application"
+      },
+      "timeFormat": {
+        "label": "Time Format",
+        "description": "Choose whether times use a 12 or 24 hour clock"
+      },
+      "autoSave": {
+        "label": "Auto-save",
+        "description": "Automatically save changes as you work"
+      },
+      "theme": {
+        "label": "Theme",
+        "description": "Switch between light, dark or your system appearance"
+      },
+      "density": {
+        "label": "Density",
+        "description": "Control how much space list items take up"
+      },
+      "sidebarCollapsed": {
+        "label": "Collapse sidebar",
+        "description": "Start with the navigation sidebar collapsed"
+      },
+      "reduceMotion": {
+        "label": "Reduce motion",
+        "description": "Minimise animated transitions across the app"
+      },
+      "email": {
+        "label": "Email notifications",
+        "description": "Send order and account updates over email"
+      },
+      "push": {
+        "label": "Push notifications",
+        "description": "Send browser push notifications"
+      },
+      "sms": {
+        "label": "SMS notifications",
+        "description": "Send order updates as text messages"
+      },
+      "whatsapp": {
+        "label": "WhatsApp notifications",
+        "description": "Send order updates over WhatsApp"
+      },
+      "tokenReminder": {
+        "label": "Token balance reminders",
+        "description": "Remind you when your wallet token balance runs low"
+      },
+      "orderEvents": {
+        "label": "Order updates",
+        "description": "Pick which order events should trigger a notification"
+      },
+      "newDeviceAlerts": {
+        "label": "New device alerts",
+        "description": "Tell me when my account is used from a new device"
+      },
+      "loginAlerts": {
+        "label": "Login alerts",
+        "description": "Tell me when someone signs in to my account"
+      },
+      "loginNotify": {
+        "label": "Login email",
+        "description": "Also send login alerts to my email address"
+      },
+      "twoFactor": {
+        "label": "Two-factor authentication",
+        "description": "Require a second factor when signing in"
+      },
+      "otpLogin": {
+        "label": "OTP login",
+        "description": "Allow signing in with a one-time password"
+      },
+      "requireEmail": {
+        "label": "Require email verification",
+        "description": "Block sign-in until the email address is verified"
+      },
+      "requirePhone": {
+        "label": "Require phone verification",
+        "description": "Block sign-in until the phone number is verified"
+      },
+      "maxSessions": {
+        "label": "Max active sessions",
+        "description": "How many devices may stay signed in at once (0 = unlimited)"
+      },
+      "sessionDays": {
+        "label": "Session length",
+        "description": "How many days a session stays valid"
+      },
+      "lockoutMinutes": {
+        "label": "Lockout duration",
+        "description": "How long an account is locked after too many failed logins (0 = never)"
+      },
+      "purgeDays": {
+        "label": "Account data retention",
+        "description": "Days before an inactive account is permanently deleted (0 = keep)"
+      },
+      "persistCart": {
+        "label": "Keep cart across devices",
+        "description": "Sync a signed-in shopper's cart between their devices"
+      }
+    },
+    "storage": {
+      "unsupported": "This browser does not report storage usage.",
+      "ofTotal": "{percent}% of {total}",
+      "items": "{count} stored",
+      "usage": {
+        "title": "Storage",
+        "description": "How much space this site is using on your device"
+      },
+      "local": {
+        "title": "Local preferences",
+        "description": "Settings saved on this device only"
+      },
+      "clear": {
+        "title": "Clear local data",
+        "description": "Remove the preferences saved on this device",
+        "action": "Clear",
+        "done": "Local preferences cleared."
+      },
+      "data": {
+        "title": "Stored Data",
+        "description": "Control what the platform keeps about your activity"
+      }
+    },
+    "options": {
+      "asiaKolkata": "India Standard Time (IST)",
+      "utc": "Coordinated Universal Time (UTC)",
+      "americaNewYork": "Eastern Time (ET)",
+      "americaChicago": "Central Time (CT)",
+      "americaDenver": "Mountain Time (MT)",
+      "americaLosAngeles": "Pacific Time (PT)",
+      "europeLondon": "London (GMT)",
+      "europeBerlin": "Berlin (CET)",
+      "asiaDubai": "Dubai (GST)",
+      "asiaSingapore": "Singapore (SGT)",
+      "asiaTokyo": "Tokyo (JST)",
+      "australiaSydney": "Sydney (AEST)",
+      "dateDmy": "DD-MM-YYYY",
+      "dateMdy": "MM/DD/YYYY (US)",
+      "dateYmd": "YYYY-MM-DD",
+      "time12": "12-hour (hh:mm A)",
+      "time24": "24-hour (HH:mm)",
+      "eventConfirmed": "Confirmed",
+      "eventShipped": "Shipped",
+      "eventDelivered": "Delivered",
+      "eventCancelled": "Cancelled",
+      "refundOriginal": "Original payment",
+      "refundCredit": "Store credit",
+      "tokenPercent": "Percent of order",
+      "tokenFixed": "Fixed amount",
+      "sortNewest": "Newest first",
+      "sortOldest": "Oldest first",
+      "sortPriceAsc": "Price: low to high",
+      "sortPriceDesc": "Price: high to low",
+      "sortRating": "Highest rated",
+      "always": "Always"
+    },
+    "all": {
+      "title": "All Settings",
+      "description": "Every setting the backend stores, grouped by category.",
+      "searchPlaceholder": "Search all settings...",
+      "searchLabel": "Search settings",
+      "clear": "Clear search",
+      "empty": "No settings match your search.",
+      "showing": "{count} of {total} settings",
+      "categoryCount": "{count} setting(s)",
+      "unknownCategory": "Other",
+      "noResultsFor": "No settings match “{term}”."
+    },
+    "categories": {
+      "analytics": {
+        "title": "Analytics",
+        "description": "Reporting windows and export limits"
+      },
+      "app": {
+        "title": "Mobile App",
+        "description": "Version gating and update prompts"
+      },
+      "business": {
+        "title": "Business",
+        "description": "Commission and order policy"
+      },
+      "cart": {
+        "title": "Cart",
+        "description": "Cart limits, holds and gift wrap"
+      },
+      "catalog": {
+        "title": "Catalog",
+        "description": "Product listing and sorting defaults"
+      },
+      "coupon": {
+        "title": "Coupons",
+        "description": "Discount caps and stacking rules"
+      },
+      "currency": {
+        "title": "Currency",
+        "description": "Currency code, symbol and decimals"
+      },
+      "customer": {
+        "title": "Customers",
+        "description": "Customer segmentation thresholds"
+      },
+      "feature": {
+        "title": "Features",
+        "description": "Feature flags for the whole platform"
+      },
+      "general": {
+        "title": "Site",
+        "description": "Site name, branding and contact details"
+      },
+      "giftCard": {
+        "title": "Gift Cards",
+        "description": "Gift card limits and expiry"
+      },
+      "locale": {
+        "title": "Locale",
+        "description": "Language, timezone and date formats"
+      },
+      "loyalty": {
+        "title": "Loyalty",
+        "description": "Points earning and redemption"
+      },
+      "notification": {
+        "title": "Notifications",
+        "description": "Channels and order events"
+      },
+      "order": {
+        "title": "Orders",
+        "description": "Order limits and verification policy"
+      },
+      "payment": {
+        "title": "Payments",
+        "description": "Payment methods and token amounts"
+      },
+      "referral": {
+        "title": "Referrals",
+        "description": "Referral rewards and expiry"
+      },
+      "refund": {
+        "title": "Refunds",
+        "description": "Refund mode and processing time"
+      },
+      "return": {
+        "title": "Returns & Reviews",
+        "description": "Return window and review editing"
+      },
+      "security": {
+        "title": "Security",
+        "description": "Sessions, passwords and lockouts"
+      },
+      "shipping": {
+        "title": "Shipping",
+        "description": "Charges, delivery estimates and reach"
+      },
+      "support": {
+        "title": "Support",
+        "description": "Chat, tickets and working hours"
+      },
+      "system": {
+        "title": "System",
+        "description": "Maintenance mode, queues and rate limits"
+      },
+      "tax": {
+        "title": "Tax",
+        "description": "Default tax rate and inclusive pricing"
+      },
+      "tracking": {
+        "title": "Tracking",
+        "description": "Analytics tracking and retention"
+      },
+      "vendor": {
+        "title": "Vendors",
+        "description": "Vendor approval, limits and payouts"
+      },
+      "wallet": {
+        "title": "Wallet",
+        "description": "Wallet balance limits and expiry"
+      }
+    }
+  },
+  "features": {
+    "title": "Feature Flags",
+    "description": "Turn platform features on or off without a deploy.",
+    "loadError": "We couldn't load the feature flags. Please try refreshing.",
+    "actionFailed": "We couldn't update that flag. Please try again.",
+    "updated": "Feature flag updated.",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "empty": "No flags match your search.",
+    "searchPlaceholder": "Search feature flags...",
+    "searchLabel": "Search feature flags",
+    "showing": "Showing {count} of {total} flags",
+    "stats": {
+      "total": "Total Flags",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    }
+  },
+  "admin": {
+    "title": "Team & Access",
+    "description": "Manage sub-admins, permissions, system health and the audit trail.",
+    "loadError": "We couldn't load this section. Please try refreshing.",
+    "actionFailed": "That change didn't work. Please try again.",
+    "updated": "Changes saved.",
+    "created": "Sub-admin created.",
+    "saving": "Saving...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "active": "Active",
+    "inactive": "Inactive",
+    "idLabel": "ID: {id}",
+    "createAction": "Add sub-admin",
+    "editAction": "Edit",
+    "suspendAction": "Suspend",
+    "activateAction": "Reactivate",
+    "deleteAction": "Delete",
+    "deleteTitle": "Delete sub-admin",
+    "deleteDescription": "{name} will lose access immediately. This cannot be undone.",
+    "deleteConfirm": "Delete",
+    "createTitle": "New sub-admin",
+    "createDescription": "They will sign in with these details and inherit the permissions you pick.",
+    "editTitle": "Edit sub-admin",
+    "editDescription": "Update their name, phone or permissions.",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Jane Doe",
+      "email": "Email",
+      "emailPlaceholder": "jane@example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "+1 555 0100",
+      "password": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "role": "Role",
+      "permissions": "Permissions",
+      "permissionsPlaceholder": "Pick a permission",
+      "permissionsNone": "No extra permission",
+      "permissionsHint": "{count} permission(s) will be granted.",
+      "permissionsDefault": "No permission chosen — the role default applies."
+    },
+    "team": {
+      "title": "Sub-admins",
+      "description": "{total} account(s) with admin access.",
+      "searchPlaceholder": "Search by name or email...",
+      "status": "Status",
+      "joined": "Joined",
+      "actions": "Actions",
+      "actionsFor": "Actions for {name}",
+      "unnamed": "Unnamed admin",
+      "empty": "No sub-admins yet.",
+      "noMatch": "No sub-admin matches your search.",
+      "showing": "Showing {from} to {to} of {total} results",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "permissions": {
+      "title": "Roles & Permissions",
+      "description": "{count} distinct permission(s) across every role.",
+      "count": "{count} of {total}",
+      "all": "Full access",
+      "unsaved": "Unsaved",
+      "superAdminNote": "This role has full access and its permissions cannot be reduced.",
+      "save": "Save permissions",
+      "discard": "Discard",
+      "saved": "Permissions updated."
+    },
+    "system": {
+      "title": "System Health",
+      "description": "Live status reported by the API.",
+      "status": "Status",
+      "database": "Database",
+      "up": "Connected",
+      "down": "Down",
+      "uptime": "Uptime",
+      "memory": "Memory",
+      "node": "Node",
+      "checked": "Checked at",
+      "unavailable": "System health is unavailable."
+    },
+    "cron": {
+      "title": "Scheduled Jobs",
+      "description": "{count} job(s) registered on the API.",
+      "registered": "Registered",
+      "unregistered": "Idle",
+      "empty": "No scheduled jobs.",
+      "unavailable": "Scheduled jobs are unavailable.",
+      "superAdminOnly": "Scheduled jobs are visible to super admins only."
+    },
+    "audit": {
+      "title": "Audit Log",
+      "description": "{total} recorded action(s).",
+      "when": "When",
+      "actor": "Actor",
+      "action": "Action",
+      "actionAll": "All actions",
+      "entity": "Entity",
+      "detail": "Detail",
+      "ip": "IP",
+      "system": "System",
+      "empty": "No audit entries match these filters.",
+      "showing": "Showing {from} to {to} of {total} results"
+    },
+    "readOnlyNotice": "You have read-only access to this control.",
+    "maintenance": {
+      "title": "Maintenance Mode",
+      "description": "Lock the site for everyone except the allowed IPs.",
+      "enable": "Enable maintenance mode",
+      "enableHint": "When on, every page shows the message below.",
+      "message": "Maintenance message",
+      "messagePlaceholder": "We'll be back soon.",
+      "allowedIps": "Allowed IP addresses",
+      "allowedIpsPlaceholder": "203.0.113.4, 198.51.100.7",
+      "allowedIpsHint": "Comma separated. Super admins can always get in.",
+      "save": "Save maintenance settings",
+      "saved": "Maintenance settings saved.",
+      "unavailable": "Maintenance status is unavailable.",
+      "superAdminOnly": "Changing maintenance mode is limited to super admins."
+    },
+    "jobs": {
+      "run": "Run now",
+      "clearCache": "Clear cache",
+      "cacheCleared": "Cache cleared.",
+      "triggered": "Job queued.",
+      "retried": "Job queued for retry.",
+      "resolved": "Job marked resolved.",
+      "deleted": "Job removed from the queue."
+    },
+    "failed": {
+      "title": "Failed Jobs",
+      "description": "{pending} pending · {resolved} resolved · {abandoned} abandoned",
+      "descriptionFallback": "Jobs that exhausted every retry.",
+      "meta": "{attempts} attempt(s) · {replays} replay(s) · last error {at}",
+      "retry": "Retry",
+      "resolve": "Resolve",
+      "more": "More",
+      "delete": "Delete",
+      "unnamed": "Unnamed job",
+      "empty": "No failed jobs. The queue is clear.",
+      "unavailable": "The failed-job queue is unavailable.",
+      "superAdminOnly": "The failed-job queue is visible to super admins only."
+    },
+    "apiKeys": {
+      "title": "API Keys",
+      "description": "{count} key(s) issued.",
+      "descriptionFallback": "Programmatic access to this API.",
+      "name": "Name",
+      "namePlaceholder": "Reporting integration",
+      "prefix": "Prefix",
+      "scopes": "Scopes",
+      "scopesPlaceholder": "report:view, report:export",
+      "noScopes": "No scopes",
+      "status": "Status",
+      "usage": "Usage",
+      "calls": "calls",
+      "active": "Active",
+      "revoked": "Revoked",
+      "expired": "Expired",
+      "actions": "Actions",
+      "createAction": "New key",
+      "revokeAction": "Revoke",
+      "deleteAction": "Delete",
+      "createTitle": "Create API key",
+      "createDescription": "Scopes are comma separated. Leave blank for none.",
+      "expiresInDays": "Expires in (days)",
+      "expiresPlaceholder": "Never",
+      "revealedTitle": "Copy this key now",
+      "revealedDescription": "The backend stores only a hash, so this is the one and only time it is shown.",
+      "done": "Done",
+      "updated": "API key updated.",
+      "empty": "No API keys yet.",
+      "unavailable": "API keys are unavailable."
+    },
+    "impersonate": {
+      "action": "Impersonate",
+      "title": "Impersonate user",
+      "description": "Issue a short-lived token for {name}.",
+      "reason": "Reason",
+      "reasonPlaceholder": "Investigating a support ticket",
+      "duration": "Duration (minutes)",
+      "submit": "Get token",
+      "tokenWarning": "This token grants full access as that user.",
+      "audited": "This impersonation, including the reason, was written to the audit log.",
+      "done": "Impersonation recorded."
+    }
   },
   "sidebar": {
     "menu": "Menu"

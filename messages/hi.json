@@ -14,7 +14,10 @@
     "workspace": "वर्कस्पेस",
     "analytics": "एनालिटिक्स",
     "users": "उपयोगकर्ता",
-    "products": "उत्पाद"
+    "products": "उत्पाद",
+    "orders": "ऑर्डर",
+    "features": "फ़ीचर",
+    "admins": "टीम"
   },
   "auth": {
     "login": {
@@ -205,6 +208,65 @@
       "next": "अगला"
     }
   },
+  "orders": {
+    "title": "ऑर्डर प्रबंधन",
+    "description": "ऑर्डर ट्रैक करें, पूर्ति प्रबंधित करें और बिक्री का विश्लेषण करें।",
+    "loadError": "हम आपके ऑर्डर लोड नहीं कर सके। कृपया रीफ़्रेश करके पुनः प्रयास करें।",
+    "idLabel": "आईडी: {id}",
+    "itemsLabel": "{count} आइटम",
+    "unitsLabel": "{count} इकाइयाँ",
+    "vendorLabel": "{count} विक्रेता",
+    "noVendor": "कोई विक्रेता नहीं",
+    "stats": {
+      "total": "कुल ऑर्डर",
+      "pending": "लंबित",
+      "shipped": "भेजे गए",
+      "revenue": "आय",
+      "pendingHint": "ध्यान देने योग्य",
+      "shippedHint": "रास्ते में"
+    },
+    "trends": {
+      "title": "ऑर्डर रुझान",
+      "description": "पिछले छह महीनों में दिए गए ऑर्डर।",
+      "empty": "अभी तक कोई ऑर्डर नहीं दिया गया है।"
+    },
+    "statusDistribution": {
+      "title": "ऑर्डर स्थिति",
+      "description": "स्थिति के अनुसार {total} ऑर्डर।",
+      "empty": "अभी समूह बनाने के लिए कोई ऑर्डर नहीं है।"
+    },
+    "statuses": {
+      "PENDING": "लंबित",
+      "PENDING_TOKEN": "टोकन बाकी",
+      "CONFIRMED": "प्रोसेसिंग",
+      "SHIPPED": "भेजा गया",
+      "OUT_FOR_DELIVERY": "डिलीवरी के लिए निकला",
+      "DELIVERED": "डिलीवर हो गया",
+      "CANCELLED": "रद्द",
+      "RETURNED": "वापस किया गया"
+    },
+    "table": {
+      "title": "ऑर्डर",
+      "description": "इस प्लेटफ़ॉर्म पर {total} ऑर्डर।",
+      "searchPlaceholder": "ऑर्डर खोजें...",
+      "status": "सभी स्थितियाँ",
+      "statusAll": "सभी स्थितियाँ",
+      "from": "से",
+      "to": "तक",
+      "apply": "लागू करें",
+      "clear": "साफ़ करें",
+      "order": "ऑर्डर",
+      "vendor": "विक्रेता",
+      "items": "आइटम",
+      "status": "स्थिति",
+      "total": "कुल",
+      "date": "दिनांक",
+      "empty": "इन फ़िल्टर से कोई ऑर्डर नहीं मिला।",
+      "showing": "{from} से {to} तक {total} परिणाम दिख रहे हैं",
+      "previous": "पिछला",
+      "next": "अगला"
+    }
+  },
   "profile": {
     "title": "प्रोफ़ाइल",
     "description": "अपनी व्यक्तिगत खाता जानकारी देखें और अपडेट करें।",
@@ -222,7 +284,503 @@
   },
   "settings": {
     "title": "सेटिंग्स",
-    "description": "अपने वर्कस्पेस की सेटिंग्स और प्राथमिकताएं प्रबंधित करें।"
+    "description": "अपनी एप्लिकेशन की प्राथमिकताएं और कॉन्फ़िगरेशन प्रबंधित करें।",
+    "loadError": "हम आपकी सेटिंग्स लोड नहीं कर सके। कृपया रीफ़्रेश करके पुनः प्रयास करें।",
+    "saveFailed": "हम वह सेटिंग सेव नहीं कर सके। कृपया पुनः प्रयास करें।",
+    "saved": "सेटिंग्स सेव हो गईं।",
+    "save": "परिवर्तन सेव करें",
+    "saving": "सेव हो रहा है...",
+    "discard": "रद्द करें",
+    "readOnly": "आपके पास इन सेटिंग्स तक केवल पढ़ने की अनुमति है।",
+    "selectPlaceholder": "विकल्प चुनें",
+    "tabs": {
+      "general": "सामान्य",
+      "appearance": "रूप-रंग",
+      "notifications": "सूचनाएं",
+      "privacy": "गोपनीयता",
+      "storage": "स्टोरेज",
+      "all": "सभी सेटिंग्स"
+    },
+    "general": {
+      "title": "सामान्य सेटिंग्स",
+      "description": "बुनियादी एप्लिकेशन प्राथमिकताओं और व्यवहार को कॉन्फ़िगर करें"
+    },
+    "workspace": {
+      "title": "वर्कस्पेस",
+      "description": "वे प्राथमिकताएं जो इसी डिवाइस पर रहती हैं"
+    },
+    "appearance": {
+      "title": "रूप-रंग",
+      "description": "चुनें कि इंटरफ़ेस कैसा दिखे और महसूस हो"
+    },
+    "notifications": {
+      "title": "सूचनाएं",
+      "description": "चुनें कि हम आपको कब और कैसे सूचित करें"
+    },
+    "privacy": {
+      "title": "गोपनीयता और सुरक्षा",
+      "description": "नियंत्रित करें कि प्लेटफ़ॉर्म आपके सेशन और डिवाइस के बारे में क्या याद रखता है"
+    },
+    "adminOnly": {
+      "title": "व्यवस्थापक द्वारा नियंत्रित",
+      "description": "ये सेटिंग्स पूरे प्लेटफ़ॉर्म पर लागू होती हैं और केवल व्यवस्थापक ही बदल सकता है।"
+    },
+    "themes": {
+      "light": "लाइट",
+      "dark": "डार्क",
+      "system": "सिस्टम"
+    },
+    "densities": {
+      "comfortable": "आरामदायक",
+      "compact": "सघन"
+    },
+    "fields": {
+      "language": {
+        "label": "एप्लिकेशन भाषा",
+        "description": "इंटरफ़ेस के लिए अपनी पसंदीदा भाषा चुनें"
+      },
+      "timezone": {
+        "label": "समय क्षेत्र",
+        "description": "सटीक टाइमस्टैम्प के लिए अपना स्थानीय समय क्षेत्र सेट करें"
+      },
+      "dateFormat": {
+        "label": "तिथि प्रारूप",
+        "description": "चुनें कि पूरे एप्लिकेशन में तिथियां कैसे दिखाई दें"
+      },
+      "timeFormat": {
+        "label": "समय प्रारूप",
+        "description": "चुनें कि समय 12 घंटे या 24 घंटे के घड़ी में दिखे"
+      },
+      "autoSave": {
+        "label": "स्वतः सेव",
+        "description": "काम करते समय परिवर्तन स्वतः सेव करें"
+      },
+      "theme": {
+        "label": "थीम",
+        "description": "लाइट, डार्क या अपने सिस्टम के रूप के बीच बदलें"
+      },
+      "density": {
+        "label": "घनत्व",
+        "description": "नियंत्रित करें कि सूची आइटम कितनी जगह लें"
+      },
+      "sidebarCollapsed": {
+        "label": "साइडबार संक्षिप्त करें",
+        "description": "नेविगेशन साइडबार को संक्षिप्त अवस्था में शुरू करें"
+      },
+      "reduceMotion": {
+        "label": "मोशन कम करें",
+        "description": "पूरे ऐप में एनिमेटेड ट्रांज़िशन कम करें"
+      },
+      "email": {
+        "label": "ईमेल सूचनाएं",
+        "description": "ऑर्डर और खाता अपडेट ईमेल से भेजें"
+      },
+      "push": {
+        "label": "पुश सूचनाएं",
+        "description": "ब्राउज़र पुश सूचनाएं भेजें"
+      },
+      "sms": {
+        "label": "एसएमएस सूचनाएं",
+        "description": "ऑर्डर अपडेट टेक्स्ट संदेश के रूप में भेजें"
+      },
+      "whatsapp": {
+        "label": "व्हाट्सएप सूचनाएं",
+        "description": "ऑर्डर अपडेट व्हाट्सएप पर भेजें"
+      },
+      "tokenReminder": {
+        "label": "टोकन बैलेंस अनुस्मारक",
+        "description": "वॉलेट टोकन बैलेंस कम होने पर याद दिलाएं"
+      },
+      "orderEvents": {
+        "label": "ऑर्डर अपडेट",
+        "description": "चुनें कि कौन से ऑर्डर इवेंट सूचना भेजें"
+      },
+      "newDeviceAlerts": {
+        "label": "नए डिवाइस अलर्ट",
+        "description": "बताएं जब मेरा खाता नए डिवाइस से उपयोग किया जाए"
+      },
+      "loginAlerts": {
+        "label": "लॉगिन अलर्ट",
+        "description": "बताएं जब कोई मेरे खाते में साइन इन करे"
+      },
+      "loginNotify": {
+        "label": "लॉगिन ईमेल",
+        "description": "लॉगिन अलर्ट मेरे ईमेल पते पर भी भेजें"
+      },
+      "twoFactor": {
+        "label": "टू-फैक्टर प्रमाणीकरण",
+        "description": "साइन इन करते समय दूसरा कारक अनिवार्य करें"
+      },
+      "otpLogin": {
+        "label": "OTP लॉगिन",
+        "description": "एक-बार के पासवर्ड से साइन इन की अनुमति दें"
+      },
+      "requireEmail": {
+        "label": "ईमेल सत्यापन आवश्यक",
+        "description": "ईमेल सत्यापित होने तक साइन इन ब्लॉक करें"
+      },
+      "requirePhone": {
+        "label": "फ़ोन सत्यापन आवश्यक",
+        "description": "फ़ोन नंबर सत्यापित होने तक साइन इन ब्लॉक करें"
+      },
+      "maxSessions": {
+        "label": "अधिकतम सक्रिय सेशन",
+        "description": "एक साथ कितने डिवाइस साइन इन रह सकते हैं (0 = कोई सीमा नहीं)"
+      },
+      "sessionDays": {
+        "label": "सेशन अवधि",
+        "description": "एक सेशन कितने दिनों तक वैध रहता है"
+      },
+      "lockoutMinutes": {
+        "label": "लॉकअट अवधि",
+        "description": "बार-बार ग़लत लॉगिन के बाद खाता कितने मिनट तक लॉक रहता है (0 = कभी नहीं)"
+      },
+      "purgeDays": {
+        "label": "खाता डेटा प्रतिधारण",
+        "description": "निष्क्रिय खाता हटाने से पहले कितने दिन (0 = रखें)"
+      },
+      "persistCart": {
+        "label": "कार्ट डिवाइसों में रखें",
+        "description": "साइन इन खरीदार का कार्ट उसके डिवाइसों के बीच सिंक करें"
+      }
+    },
+    "storage": {
+      "unsupported": "यह ब्राउज़र स्टोरेज उपयोग की जानकारी नहीं देता।",
+      "ofTotal": "{total} में से {percent}%",
+      "items": "{count} संग्रहीत",
+      "usage": {
+        "title": "स्टोरेज",
+        "description": "यह साइट आपके डिवाइस पर कितनी जगह इस्तेमाल कर रही है"
+      },
+      "local": {
+        "title": "स्थानीय प्राथमिकताएं",
+        "description": "केवल इसी डिवाइस पर सेव की गई सेटिंग्स"
+      },
+      "clear": {
+        "title": "स्थानीय डेटा हटाएं",
+        "description": "इसी डिवाइस पर सेव की गई प्राथमिकताएं हटाएं",
+        "action": "हटाएं",
+        "done": "स्थानीय प्राथमिकताएं हटा दी गईं।"
+      },
+      "data": {
+        "title": "संग्रहीत डेटा",
+        "description": "नियंत्रित करें कि प्लेटफ़ॉर्म आपकी गतिविधि का क्या रिकॉर्ड रखता है"
+      }
+    },
+    "options": {
+      "asiaKolkata": "भारतीय मानक समय (IST)",
+      "utc": "समन्वित सार्वभौमिक समय (UTC)",
+      "americaNewYork": "ईस्टर्न टाइम (ET)",
+      "americaChicago": "सेंट्रल टाइम (CT)",
+      "americaDenver": "माउंटेन टाइम (MT)",
+      "americaLosAngeles": "पैसिफिक टाइम (PT)",
+      "europeLondon": "लंदन (GMT)",
+      "europeBerlin": "बर्लिन (CET)",
+      "asiaDubai": "दुबई (GST)",
+      "asiaSingapore": "सिंगापुर (SGT)",
+      "asiaTokyo": "टोक्यो (JST)",
+      "australiaSydney": "सिडनी (AEST)",
+      "dateDmy": "DD-MM-YYYY",
+      "dateMdy": "MM/DD/YYYY (US)",
+      "dateYmd": "YYYY-MM-DD",
+      "time12": "12-घंटे (hh:mm A)",
+      "time24": "24-घंटे (HH:mm)",
+      "eventConfirmed": "पुष्टि हुआ",
+      "eventShipped": "भेजा गया",
+      "eventDelivered": "डिलीवर हुआ",
+      "eventCancelled": "रद्द",
+      "refundOriginal": "मूल भुगतान",
+      "refundCredit": "स्टोर क्रेडिट",
+      "tokenPercent": "ऑर्डर का प्रतिशत",
+      "tokenFixed": "निश्चित राशि",
+      "sortNewest": "नए पहले",
+      "sortOldest": "पुराने पहले",
+      "sortPriceAsc": "कीमत: कम से ज़्यादा",
+      "sortPriceDesc": "कीमत: ज़्यादा से कम",
+      "sortRating": "सर्वाधिक रेटिंग",
+      "always": "हमेशा"
+    },
+    "all": {
+      "title": "सभी सेटिंग्स",
+      "description": "बैकएंड में संग्रहीत हर सेटिंग, श्रेणी के अनुसार।",
+      "searchPlaceholder": "सभी सेटिंग्स खोजें...",
+      "searchLabel": "सेटिंग्स खोजें",
+      "clear": "खोज साफ़ करें",
+      "empty": "आपकी खोज से कोई सेटिंग मेल नहीं खाती।",
+      "showing": "{total} में से {count} सेटिंग्स",
+      "categoryCount": "{count} सेटिंग",
+      "unknownCategory": "अन्य",
+      "noResultsFor": "“{term}” से कोई सेटिंग मेल नहीं खाती।"
+    },
+    "categories": {
+      "analytics": {
+        "title": "एनालिटिक्स",
+        "description": "रिपोर्टिंग विंडो और एक्सपोर्ट सीमा"
+      },
+      "app": {
+        "title": "मोबाइल ऐप",
+        "description": "वर्जन गेटिंग और अपडेट प्रॉम्प्ट"
+      },
+      "business": { "title": "व्यवसाय", "description": "कमीशन और ऑर्डर नीति" },
+      "cart": { "title": "कार्ट", "description": "कार्ट सीमा, होल्ड और गिफ्ट रैप" },
+      "catalog": {
+        "title": "कैटलॉग",
+        "description": "उत्पाद सूची और सॉर्ट डिफ़ॉल्ट"
+      },
+      "coupon": { "title": "कूपन", "description": "छूट सीमा और स्टैकिंग नियम" },
+      "currency": { "title": "मुद्रा", "description": "मुद्रा कोड, चिह्न और दशमलव" },
+      "customer": { "title": "ग्राहक", "description": "ग्राहक खंड सीमाएं" },
+      "feature": { "title": "फ़ीचर", "description": "पूरे प्लेटफ़ॉर्म के फ़ीचर फ़्लैग" },
+      "general": {
+        "title": "साइट",
+        "description": "साइट का नाम, ब्रांडिंग और संपर्क"
+      },
+      "giftCard": {
+        "title": "गिफ्ट कार्ड",
+        "description": "गिफ्ट कार्ड सीमा और समाप्ति"
+      },
+      "locale": {
+        "title": "लोकेल",
+        "description": "भाषा, समय क्षेत्र और तिथि प्रारूप"
+      },
+      "loyalty": { "title": "लॉयल्टी", "description": "पॉइंट अर्जन और रिडेम्पशन" },
+      "notification": { "title": "सूचनाएं", "description": "चैनल और ऑर्डर इवेंट" },
+      "order": { "title": "ऑर्डर", "description": "ऑर्डर सीमा और सत्यापन नीति" },
+      "payment": {
+        "title": "भुगतान",
+        "description": "भुगतान विधियाँ और टोकन राशि"
+      },
+      "referral": { "title": "रेफ़रल", "description": "रेफ़रल पुरस्कार और समाप्ति" },
+      "refund": { "title": "रिफ़ंड", "description": "रिफ़ंड मोड और प्रोसेसिंग समय" },
+      "return": {
+        "title": "रिटर्न और समीक्षा",
+        "description": "रिटर्न विंडो और समीक्षा संपादन"
+      },
+      "security": { "title": "सुरक्षा", "description": "सेशन, पासवर्ड और लॉकआउट" },
+      "shipping": {
+        "title": "शिपिंग",
+        "description": "शुल्क, डिलीवरी अनुमान और पहुंच"
+      },
+      "support": { "title": "सहायता", "description": "चैट, टिकट और कार्य समय" },
+      "system": {
+        "title": "सिस्टम",
+        "description": "मेंटेनेंस मोड, कतार और रेट सीमा"
+      },
+      "tax": { "title": "कर", "description": "डिफ़ॉल्ट कर दर और समावेशित मूल्य" },
+      "tracking": {
+        "title": "ट्रैकिंग",
+        "description": "एनालिटिक्स ट्रैकिंग और प्रतिधारण"
+      },
+      "vendor": {
+        "title": "विक्रेता",
+        "description": "विक्रेता अनुमोदन, सीमा और भुगतान"
+      },
+      "wallet": { "title": "वॉलेट", "description": "वॉलेट बैलेंस सीमा और समाप्ति" }
+    }
+  },
+  "features": {
+    "title": "फ़ीचर फ़्लैग",
+    "description": "बिना डिप्लॉय के प्लेटफ़ॉर्म फ़ीचर चालू या बंद करें।",
+    "loadError": "हम फ़ीचर फ़्लैग लोड नहीं कर सके। कृपया रीफ़्रेश करके पुनः प्रयास करें।",
+    "actionFailed": "हम वह फ़्लैग अपडेट नहीं कर सके। कृपया पुनः प्रयास करें।",
+    "updated": "फ़ीचर फ़्लैग अपडेट हो गया।",
+    "enabled": "चालू",
+    "disabled": "बंद",
+    "empty": "आपकी खोज से कोई फ़्लैग मेल नहीं खाता।",
+    "searchPlaceholder": "फ़ीचर फ़्लैग खोजें...",
+    "searchLabel": "फ़ीचर फ़्लैग खोजें",
+    "showing": "{total} में से {count} फ़्लैग दिख रहे हैं",
+    "stats": {
+      "total": "कुल फ़्लैग",
+      "enabled": "चालू",
+      "disabled": "बंद"
+    }
+  },
+  "admin": {
+    "title": "टीम और पहुंच",
+    "description": "सब-एडमिन, अनुमतियां, सिस्टम स्वास्थ्य और ऑडिट ट्रेल प्रबंधित करें।",
+    "loadError": "हम यह सेक्शन लोड नहीं कर सके। कृपया रीफ़्रेश करके पुनः प्रयास करें।",
+    "actionFailed": "यह बदलाव काम नहीं आया। कृपया पुनः प्रयास करें।",
+    "updated": "बदलाव सेव हो गए।",
+    "created": "सब-एडमिन बन गया।",
+    "saving": "सेव हो रहा है...",
+    "save": "सेव करें",
+    "cancel": "रद्द करें",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "idLabel": "आईडी: {id}",
+    "createAction": "सब-एडमिन जोड़ें",
+    "editAction": "संपादित करें",
+    "suspendAction": "निलंबित करें",
+    "activateAction": "पुनः सक्रिय करें",
+    "deleteAction": "हटाएं",
+    "deleteTitle": "सब-एडमिन हटाएं",
+    "deleteDescription": "{name} की पहुंच तुरंत समाप्त हो जाएगी। इसे वापस नहीं लाया जा सकता।",
+    "deleteConfirm": "हटाएं",
+    "createTitle": "नया सब-एडमिन",
+    "createDescription": "वे इन्हीं विवरणों से साइन इन करेंगे और आपकी चुनी अनुमतियां विरासत में लेंगे।",
+    "editTitle": "सब-एडमिन संपादित करें",
+    "editDescription": "उनका नाम, फ़ोन या अनुमतियां अपडेट करें।",
+    "fields": {
+      "name": "नाम",
+      "namePlaceholder": "जेन डो",
+      "email": "ईमेल",
+      "emailPlaceholder": "jane@example.com",
+      "phone": "फ़ोन",
+      "phonePlaceholder": "+1 555 0100",
+      "password": "पासवर्ड",
+      "passwordPlaceholder": "कम से कम 8 अक्षर",
+      "role": "भूमिका",
+      "permissions": "अनुमतियां",
+      "permissionsPlaceholder": "एक अनुमति चुनें",
+      "permissionsNone": "कोई अतिरिक्त अनुमति नहीं",
+      "permissionsHint": "{count} अनुमति(यां) दी जाएंगी।",
+      "permissionsDefault": "कोई अनुमति नहीं चुनी — भूमिका का डिफ़ॉल्ट लागू होगा।"
+    },
+    "team": {
+      "title": "सब-एडमिन",
+      "description": "एडमिन पहुंच वाले {total} खाते।",
+      "searchPlaceholder": "नाम या ईमेल से खोजें...",
+      "status": "स्थिति",
+      "joined": "शामिल हुए",
+      "actions": "क्रियाएं",
+      "actionsFor": "{name} की क्रियाएं",
+      "unnamed": "बेनाम एडमिन",
+      "empty": "अभी कोई सब-एडमिन नहीं है।",
+      "noMatch": "आपकी खोज से कोई सब-एडमिन नहीं मिला।",
+      "showing": "{from} से {to} तक {total} परिणाम दिख रहे हैं",
+      "previous": "पिछला",
+      "next": "अगला"
+    },
+    "permissions": {
+      "title": "भूमिकाएं और अनुमतियां",
+      "description": "हर भूमिका में {count} अलग अनुमति(यां)।",
+      "count": "{total} में से {count}",
+      "all": "पूर्ण पहुंच",
+      "unsaved": "असेव",
+      "superAdminNote": "इस भूमिका को पूर्ण पहुंच है और इनकी अनुमतियां कम नहीं की जा सकतीं।",
+      "save": "अनुमतियां सेव करें",
+      "discard": "रद्द करें",
+      "saved": "अनुमतियां अपडेट हो गईं।"
+    },
+    "system": {
+      "title": "सिस्टम स्वास्थ्य",
+      "description": "API द्वारा बताई गई लाइव स्थिति।",
+      "status": "स्थिति",
+      "database": "डेटाबेस",
+      "up": "जुड़ा हुआ",
+      "down": "बंद",
+      "uptime": "अपटाइम",
+      "memory": "मेमोरी",
+      "node": "नोड",
+      "checked": "जांच का समय",
+      "unavailable": "सिस्टम स्वास्थ्य उपलब्ध नहीं है।"
+    },
+    "cron": {
+      "title": "निर्धारित कार्य",
+      "description": "API पर पंजीकृत {count} कार्य।",
+      "registered": "पंजीकृत",
+      "unregistered": "निष्क्रिय",
+      "empty": "कोई निर्धारित कार्य नहीं।",
+      "unavailable": "निर्धारित कार्य उपलब्ध नहीं हैं।",
+      "superAdminOnly": "निर्धारित कार्य केवल सुपर एडमिन को दिखते हैं।"
+    },
+    "audit": {
+      "title": "ऑडिट लॉग",
+      "description": "{total} दर्ज कार्रवाई(यां)।",
+      "when": "कब",
+      "actor": "कर्ता",
+      "action": "कार्रवाई",
+      "actionAll": "सभी कार्रवाइयां",
+      "entity": "इकाई",
+      "detail": "विवरण",
+      "ip": "आईपी",
+      "system": "सिस्टम",
+      "empty": "इन फ़िल्टर से कोई ऑडिट प्रविष्टि नहीं मिली।",
+      "showing": "{from} से {to} तक {total} परिणाम दिख रहे हैं"
+    },
+    "readOnlyNotice": "आपके पास इस नियंत्रण तक केवल पढ़ने की अनुमति है।",
+    "maintenance": {
+      "title": "मेंटेनेंस मोड",
+      "description": "अनुमत IPs को छोड़कर पूरी साइट बंद करें।",
+      "enable": "मेंटेनेंस मोड चालू करें",
+      "enableHint": "चालू होने पर हर पेज पर नीचे का संदेश दिखेगा।",
+      "message": "मेंटेनेंस संदेश",
+      "messagePlaceholder": "हम जल्द वापस आएंगे।",
+      "allowedIps": "अनुमत IP पते",
+      "allowedIpsPlaceholder": "203.0.113.4, 198.51.100.7",
+      "allowedIpsHint": "कॉमा से अलग। सुपर एडमिन हमेशा अंदर आ सकता है।",
+      "save": "मेंटेनेंस सेटिंग्स सेव करें",
+      "saved": "मेंटेनेंस सेटिंग्स सेव हो गईं।",
+      "unavailable": "मेंटेनेंस स्थिति उपलब्ध नहीं है।",
+      "superAdminOnly": "मेंटेनेंस मोड बदलना केवल सुपर एडमिन के लिए है।"
+    },
+    "jobs": {
+      "run": "अभी चलाएं",
+      "clearCache": "कैश साफ़ करें",
+      "cacheCleared": "कैश साफ़ हो गया।",
+      "triggered": "कार्य कतार में जोड़ दिया गया।",
+      "retried": "कार्य पुनः प्रयास के लिए कतार में जोड़ा गया।",
+      "resolved": "कार्य हल हुआ चिह्नित किया गया।",
+      "deleted": "कार्य कतार से हटा दिया गया।"
+    },
+    "failed": {
+      "title": "विफल कार्य",
+      "description": "{pending} लंबित · {resolved} हल हुए · {abandoned} छोड़े गए",
+      "descriptionFallback": "ऐसे कार्य जिनके सभी पुनः प्रयास खत्म हो गए।",
+      "meta": "{attempts} प्रयास · {replays} रीप्ले · अंतिम त्रुटि {at}",
+      "retry": "पुनः प्रयास",
+      "resolve": "हल करें",
+      "more": "और",
+      "delete": "हटाएं",
+      "unnamed": "बेनाम कार्य",
+      "empty": "कोई विफल कार्य नहीं। कतार साफ़ है।",
+      "unavailable": "विफल कार्यों की कतार उपलब्ध नहीं है।",
+      "superAdminOnly": "विफल कार्यों की कतार केवल सुपर एडमिन को दिखती है।"
+    },
+    "apiKeys": {
+      "title": "API कुंजियां",
+      "description": "{count} कुंजी(यां) जारी।",
+      "descriptionFallback": "इस API तक प्रोग्रामेटिक पहुंच।",
+      "name": "नाम",
+      "namePlaceholder": "रिपोर्टिंग इंटीग्रेशन",
+      "prefix": "उपसर्ग",
+      "scopes": "स्कोप",
+      "scopesPlaceholder": "report:view, report:export",
+      "noScopes": "कोई स्कोप नहीं",
+      "status": "स्थिति",
+      "usage": "उपयोग",
+      "calls": "बार",
+      "active": "सक्रिय",
+      "revoked": "निरस्त",
+      "expired": "समाप्त",
+      "actions": "क्रियाएं",
+      "createAction": "नई कुंजी",
+      "revokeAction": "निरस्त करें",
+      "deleteAction": "हटाएं",
+      "createTitle": "API कुंजी बनाएं",
+      "createDescription": "स्कोप कॉमा से अलग लिखें। खाली छोड़ने पर कोई स्कोप नहीं।",
+      "expiresInDays": "कितने दिन में (समाप्ति)",
+      "expiresPlaceholder": "कभी नहीं",
+      "revealedTitle": "कुंजी अभी कॉपी करें",
+      "revealedDescription": "बैकएंड सिर्फ हैश सेव करता है, इसलिए यह एकमात्र बार दिखेगी।",
+      "done": "हो गया",
+      "updated": "API कुंजी अपडेट हो गई।",
+      "empty": "अभी कोई API कुंजी नहीं है।",
+      "unavailable": "API कुंजियां उपलब्ध नहीं हैं।"
+    },
+    "impersonate": {
+      "action": "प्रतिरूप बनाएं",
+      "title": "उपयोगकर्ता का रूप धारण करें",
+      "description": "{name} के लिए अल्पकालिक टोकन जारी करें।",
+      "reason": "कारण",
+      "reasonPlaceholder": "सपोर्ट टिकट की जांच",
+      "duration": "अवधि (मिनट)",
+      "submit": "टोकन लें",
+      "tokenWarning": "यह टोकन उस उपयोगकर्ता की पूरी पहुंच देता है।",
+      "audited": "यह प्रतिरूपण, कारण सहित, ऑडिट लॉग में दर्ज हो गया।",
+      "done": "प्रतिरूपण दर्ज हो गया।"
+    }
   },
   "sidebar": {
     "menu": "मेन्यू"

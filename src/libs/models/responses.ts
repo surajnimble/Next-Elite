@@ -37,7 +37,6 @@ export interface DashboardStats {
   pendingRefunds: number;
 }
 
-/** One row of `GET /users/getAll` — mirrors the backend's `serializeUser`. */
 export interface UserItem {
   userId: string;
   name: string;
@@ -65,7 +64,7 @@ export interface UserItem {
 
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'all';
 
-/** Pagination the backend merges into `result` of every list response. */
+/** The backend merges these into `result` of every list response. */
 export interface PaginatedResult {
   totalRecord: number;
   totalPage: number;
@@ -77,7 +76,6 @@ export interface PaginatedResult {
   previousPage: number;
 }
 
-/** The filters the backend echoes back with the list. */
 export interface UserFilterData {
   search: string;
   role: string;
@@ -90,7 +88,6 @@ export interface UserListResult extends PaginatedResult {
   userList: UserItem[];
 }
 
-/** Query for `GET /users/getAll`; every field is optional. */
 export interface UserListQuery {
   page?: number;
   limit?: number;
@@ -100,17 +97,14 @@ export interface UserListQuery {
   vendorStatus?: string;
 }
 
-/** `result` of `PATCH /users/toggleStatus/:id`. */
 export interface UserStatusResult {
   userId: string;
   isActive: boolean;
   status: 'ACTIVE' | 'SUSPENDED';
 }
 
-/** Backend `PRODUCT_STATUS`. */
 export type ProductStatus = 'DRAFT' | 'ACTIVE' | 'INACTIVE' | 'ARCHIVED';
 
-/** One row of `GET /products/getAll` — mirrors `serializeProductSummary`. */
 export interface ProductItem {
   productId: string;
   vendorId: string;
@@ -134,7 +128,6 @@ export interface ProductItem {
   reviewList: unknown[];
 }
 
-/** Query for `GET /products/getAll`; every field is optional. */
 export interface ProductListQuery {
   page?: number;
   limit?: number;
@@ -166,7 +159,6 @@ export interface ProductListResult extends PaginatedResult {
   productList: ProductItem[];
 }
 
-/** `result` of `GET /products/getFilters` — used to fill the filter dropdowns. */
 export interface ProductFilters {
   categoryList: { categoryId: string; name: string; count: number }[];
   brandList: { brandId: string; name: string; count: number }[];
@@ -179,14 +171,213 @@ export interface ProductFilters {
   }[];
 }
 
-/** `result` of `PATCH /products/toggleStatus/:id`. */
 export interface ProductStatusResult {
   productId: string;
   status: ProductStatus;
   isActive: boolean;
 }
 
-/** Backend `ORDER_STATUS`. */
+export interface SystemSettingItem {
+  settingId: string;
+  key: string;
+  /** The backend stores `Json`, so this is whatever was written. */
+  value: unknown;
+  category: string;
+  isPublic: boolean;
+  updatedBy: string;
+  updatedAt: string;
+}
+
+export interface SettingsListQuery {
+  page?: number;
+  limit?: number;
+  category?: string;
+  /** The backend takes these as strings, not booleans. */
+  isPublic?: 'true' | 'false';
+  sort?: string;
+}
+
+export interface SettingsListResult extends PaginatedResult {
+  itemList: SystemSettingItem[];
+}
+
+export interface SettingsCategoryResult {
+  category: string;
+  settingList: Record<string, unknown>;
+}
+
+/** Flat key → value map, and it needs no auth — a regular user can read it. */
+export type PublicSettingsResult = Record<string, unknown>;
+
+export interface SettingsBulkResult {
+  updatedCount: number;
+}
+
+/** A flat `feature.*` → boolean map; the list is built from this, never hard-coded. */
+export type FeatureFlagsResult = Record<string, boolean>;
+
+export interface SubAdminItem {
+  userId: string;
+  name: string;
+  email: string;
+  phone: string;
+  avatarUrl: string;
+  role: string;
+  isActive: boolean;
+  isEmailVerified: boolean;
+  isPhoneVerified: boolean;
+  isTwoFactorEnabled: boolean;
+  lastLoginAt: string;
+  createdAt: string;
+  updatedAt: string;
+  rolesList: string[];
+}
+
+export interface SubAdminListResult extends PaginatedResult {
+  itemList: SubAdminItem[];
+}
+
+export interface RolePermissionsResult {
+  roleList: Record<string, string[]>;
+}
+
+export interface SystemHealthResult {
+  status: string;
+  database: { ok: boolean; latencyMs: number };
+  uptimeSeconds: number;
+  memoryMb: number;
+  nodeVersion: string;
+  checkedAt: string;
+}
+
+export interface CronJob {
+  name: string;
+  queue: string;
+  job: string;
+  cron: string;
+  description: string;
+  nextRunAt: string;
+  isRegistered: boolean;
+}
+
+export interface CronJobsResult {
+  jobCount: number;
+  jobList: CronJob[];
+}
+
+export interface AuditLogItem {
+  auditLogId: string;
+  actorId: string;
+  actorRole: string;
+  action: string;
+  entity: string;
+  entityId: string;
+  description: string;
+  changes: unknown;
+  meta: unknown;
+  ip: string;
+  userAgent: string;
+  createdAt: string;
+  actorData: { userId: string; name: string; email: string };
+}
+
+export interface AuditLogQuery {
+  page?: number;
+  limit?: number;
+  actorId?: string;
+  action?: string;
+  entity?: string;
+  entityId?: string;
+  from?: string;
+  to?: string;
+}
+
+export interface AuditLogListResult extends PaginatedResult {
+  itemList: AuditLogItem[];
+}
+
+export interface MaintenanceStatus {
+  enabled: boolean;
+  message: string;
+  allowedIps: string[];
+}
+
+export interface FailedJob {
+  failedJobId: string;
+  queue: string;
+  jobName: string;
+  sourceJobId: string;
+  status: string;
+  error: string;
+  attemptsMade: number;
+  replayCount: number;
+  resolvedBy: string;
+  lastErrorAt: string;
+  replayedAt: string;
+  resolvedAt: string;
+  createdAt: string;
+  payloadData: unknown;
+}
+
+export interface FailedJobQuery {
+  page?: number;
+  limit?: number;
+  status?: string;
+  queue?: string;
+  jobName?: string;
+}
+
+export interface FailedJobListResult extends PaginatedResult {
+  pendingCount: number;
+  filterData: {
+    status: string;
+    queue: string;
+    jobName: string;
+    search: string;
+  };
+  countsData: {
+    pendingCount: number;
+    resolvedCount: number;
+    abandonedCount: number;
+  };
+  failedJobList: FailedJob[];
+}
+
+export interface ApiKeyItem {
+  id: string;
+  name: string;
+  prefix: string;
+  scopes: string[];
+  isActive: boolean;
+  expiresAt: string;
+  lastUsedAt: string;
+  usageCount: number;
+  createdAt: string;
+  revokedAt: string;
+}
+
+export interface ApiKeyListResult {
+  itemCount: number;
+  itemList: ApiKeyItem[];
+}
+
+/** `key` is returned here and nowhere else. */
+export interface CreatedApiKey {
+  id: string;
+  name: string;
+  key: string;
+  prefix: string;
+  scopes: string[];
+  expiresAt: string;
+  createdAt: string;
+}
+
+export interface ImpersonationResult {
+  accessToken: string;
+  expiresIn: number;
+  target: { id: string; name: string; email: string; role: string };
+}
+
 export type OrderStatus =
   | 'PENDING'
   | 'PENDING_TOKEN'
@@ -197,7 +388,6 @@ export type OrderStatus =
   | 'CANCELLED'
   | 'RETURNED';
 
-/** One row of `GET /orders/getAll` — mirrors `serializeOrderSummary`. */
 export interface OrderItem {
   orderId: string;
   orderNumber: string;
