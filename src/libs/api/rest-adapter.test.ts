@@ -80,6 +80,23 @@ describe('rest-adapter', () => {
         }),
       ).toBe(`${BASE_URL}/admin/getDashboardStats?page=1&limit=20`);
     });
+
+    it('appends the version when the env holds the bare host', () => {
+      process.env.API_BASE_URL = 'https://api.example.com';
+      expect(buildUrl('auth/login')).toBe(`${BASE_URL}/auth/login`);
+    });
+
+    it('appends the version when the env has a trailing slash', () => {
+      process.env.API_BASE_URL = 'https://api.example.com/';
+      expect(buildUrl('auth/login')).toBe(`${BASE_URL}/auth/login`);
+    });
+
+    it('keeps an explicit version in the env instead of doubling it', () => {
+      process.env.API_BASE_URL = 'https://api.example.com/api/v2';
+      expect(buildUrl('auth/login')).toBe(
+        'https://api.example.com/api/v2/auth/login',
+      );
+    });
   });
 
   describe('apiFetch', () => {

@@ -14,6 +14,7 @@ import type {
   ApiResult,
   HttpMethod,
 } from './types';
+import { API_VERSION } from './api-urls';
 
 const TIMEOUT_MS = 15_000;
 
@@ -81,12 +82,25 @@ function splitCode(raw: string): { message: string; code?: string } {
   return { message: raw.slice(0, match.index), code: match[1] };
 }
 
+const VERSIONED_BASE = /\/api\/v\d+$/i;
+
+/**
+ * `API_BASE_URL` may be the bare host or already carry `/api/v1`. Older
+ * deployments set the bare host, so append the version instead of 404-ing.
+ * An explicit version in the env always wins.
+ */
+function normalizeBase(raw: string): string {
+  const base = raw.replace(/\/+$/, '');
+  return VERSIONED_BASE.test(base) ? base : `${base}/api/${API_VERSION}`;
+}
+
 export function buildUrl(
   path: string,
   query?: ApiRequestOptions['query'],
 ): string {
-  const base = env.API_BASE_URL.replace(/\/+$/, '');
-  const url = new URL(`${base}/${path.replace(/^\/+/, '')}`);
+  const url = new URL(
+    `${normalizeBase(env.API_BASE_URL)}/${path.replace(/^\/+/, '')}`,
+  );
 
   for (const [key, value] of Object.entries(query ?? {})) {
     if (value !== undefined) url.searchParams.set(key, String(value));

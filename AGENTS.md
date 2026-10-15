@@ -396,10 +396,11 @@ export type DashboardStats = Normalized<typeof DASHBOARD_STATS>; // sab fields n
 
 `string → ''`, `number → 0`, `boolean → false`, `array → []`. Naya response add karte waqt defaults likh do — wahi se uska TypeScript type bhi banta hai, dobara likhna nahi padta.
 
-**API version badalna (v1 → v2):** sirf **ek** jagah edit karo — `API_BASE_URL` (`.env`), kyunki version prefix base URL me hai aur `API_URLS` me sirf bare paths hain:
+**API version badalna (v1 → v2):** env me do dono shakal valid hain — `normalizeBase()` (`rest-adapter.ts`) bare host ho to `API_VERSION` jodta hai, aur `/api/v<N>` already maujood ho to use as-is rakhta hai:
 
 ```
 API_BASE_URL=https://projectname-api.onrender.com/api/v1   # ← v2 ke liye api/v2
+API_BASE_URL=https://projectname-api.onrender.com          # ← same, /api/v1 apne aap jud jayega
 ```
 
 ```ts
@@ -410,7 +411,9 @@ export const API_URLS = {
 } as const satisfies Record<string, `${string}/${string}`>;
 ```
 
-`ApiUrlPattern`-style guard yahan nahi chahiye kyunki version `API_URLS` me nahi hai. Default `DEFAULT_API_BASE_URL` `src/libs/env.ts` me hai.
+`ApiUrlPattern`-style guard yahan nahi chahiye kyunki version `API_URLS` me nahi hai. Default `DEFAULT_API_BASE_URL` `src/libs/env.ts` me hai; fallback `API_VERSION` `api-urls.ts` me.
+
+> **Gotcha:** ye backwards compatibility hai, license nahi. Purane deployments ne `API_BASE_URL` bare host set kiya tha; version ko env se code me shift karte waqt bina migration ke env contract badal dena tha aur har 404 ho gaya. Env var ka shape kabhi chup-chaap mat badlo — ya to normalize karo (jaise yahan), ya release note me migration likho.
 
 **Usage**
 
@@ -1011,3 +1014,13 @@ These are real and worth fixing opportunistically (not blockers):
 ---
 
 _Last reviewed against the repository contents: Next Elite v2.1.0 (API auth + protected sidebar area, English + Hindi). Update this file whenever the structure, commands, permissions, locales, or conventions change._
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
